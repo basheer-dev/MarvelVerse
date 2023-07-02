@@ -13,7 +13,10 @@ final class MainVC: UIViewController {
     
     enum Pages: String, CaseIterable {
         case comics = "Comics"
+        case series = "Series"
         case characters = "Characters"
+        case stories = "Stories"
+        
     }
     
     private let sideMenu: UIView = {
@@ -114,21 +117,30 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func switchView(to title: String) {
+        // Checking if the user tried to open an already opened view controller
+        guard self.title != title else { return }
+        
         // Clearing out previous view controllers
         children.first?.removeFromParent()
         view.subviews.first?.removeFromSuperview()
         
         // Adding the new view controller
         let dest: UIViewController
+        
         switch title {
+        case Pages.series.rawValue:
+            dest = SeriesVC()
         case Pages.characters.rawValue:
             dest = CharactersVC()
+        case Pages.stories.rawValue:
+            dest = StoriesVC()
         default:
             dest = ComicsVC()
         }
         
-        self.title = title
         addChild(dest)
         view.insertSubview(dest.view, at: 0)
+        
+        self.title = title
     }
 }

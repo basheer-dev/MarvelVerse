@@ -17,6 +17,7 @@ final class ComicCell: UITableViewCell {
 //        imageView.contentMode = .center
 //        imageView.tintColor = .systemRed
 //        imageView.backgroundColor = .systemGray6
+        imageView.isUserInteractionEnabled = true
         
         return imageView
     }()
@@ -48,8 +49,9 @@ final class ComicCell: UITableViewCell {
         label.text = "This is a description and I have no idea what the hell I'm writing. I guess my name is Basheer and I hate going to college."
         label.font = .systemFont(ofSize: 14)
         label.textColor = .systemGray
-        label.numberOfLines = 3
+        label.numberOfLines = 0
         label.lineBreakMode = .byTruncatingTail
+        label.textAlignment = .justified
         
         return label
     }()
@@ -64,7 +66,7 @@ final class ComicCell: UITableViewCell {
         
         return label
     }()
-    
+        
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -78,13 +80,53 @@ final class ComicCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func set(comic: Comic) {
+        titleLabel.text = comic.title
+        pagesCountLabel.text = "Pages: \(comic.pageCount ?? 0)"
+        thumbNailImageView.image = .none
+        
+        /// Handling the description
+        descriptionLabel.text = "No available description"
+        
+        if let descriptionText = comic.description {
+            if !descriptionText.isEmpty {
+                descriptionLabel.text = descriptionText
+            }
+        }
+        
+        /// Getting the thumbnail image
+        if let thumbnailImagePath = comic.thumbnail?.path as? String {
+            if let thumbnailImageExt = comic.thumbnail?.extension as? String {
+                let thumbnailImageUrlString = thumbnailImagePath.replacingOccurrences(of: "http://", with: "https://") + "." + thumbnailImageExt
+                
+                if let thumbnailImageUrl = URL(string: thumbnailImageUrlString) {
+                    URLSession.shared.dataTask(with: thumbnailImageUrl) {
+                        [weak self] data, _, error in
+                        guard error == nil,
+                              let data = data else { return }
+                        DispatchQueue.main.async {
+                            self?.thumbNailImageView.image = UIImage(data: data)
+                        }
+                    }.resume()
+                }
+            }
+        }
+    }
+    
     // MARK: - ACTIONS
     @objc private func saveButtonTapped() {
         print("save")
     }
     
+    @objc private func didTapComic() {
+        print(titleLabel.text)
+    }
+    
     // MARK: - SUBVIEWS
     private func configureSubviews() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
+        thumbNailImageView.isUserInteractionEnabled = true
+        thumbNailImageView.addGestureRecognizer(tapGesture)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         addSubview(thumbNailImageView)
@@ -97,8 +139,7 @@ final class ComicCell: UITableViewCell {
             thumbNailImageView.topAnchor.constraint(equalTo: topAnchor),
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            thumbNailImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 800),
-//            thumbNailImageView.heightAnchor.constraint(equalTo: widthAnchor),
+            thumbNailImageView.heightAnchor.constraint(equalToConstant: 500),
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),

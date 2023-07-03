@@ -24,7 +24,6 @@ final class MainVC: UIViewController {
         let menu = UIView()
         menu.backgroundColor = .systemRed
         
-        menu.layer.cornerRadius = 10
         menu.clipsToBounds = true
         
         return menu

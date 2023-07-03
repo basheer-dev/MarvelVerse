@@ -15,6 +15,7 @@ class ComicsVC: UIViewController {
         tableView.dataSource = self
         
         tableView.register(ComicCell.self, forCellReuseIdentifier: ComicCell.id)
+        tableView.separatorStyle = .none
         
         return tableView
     }()

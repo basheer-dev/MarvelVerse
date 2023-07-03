@@ -14,6 +14,10 @@ final class ComicCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+//        imageView.contentMode = .center
+//        imageView.tintColor = .systemRed
+//        imageView.backgroundColor = .systemGray6
+        
         return imageView
     }()
     
@@ -55,7 +59,7 @@ final class ComicCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Pages: 112"
         
-        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.font = .systemFont(ofSize: 10, weight: .bold)
         label.textColor = .systemRed
         
         return label
@@ -64,6 +68,8 @@ final class ComicCell: UITableViewCell {
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        contentView.isUserInteractionEnabled = true
         
         configureSubviews()
     }
@@ -72,8 +78,15 @@ final class ComicCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - ACTIONS
+    @objc private func saveButtonTapped() {
+        print("save")
+    }
+    
     // MARK: - SUBVIEWS
     private func configureSubviews() {
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        
         addSubview(thumbNailImageView)
         addSubview(saveButton)
         addSubview(titleLabel)
@@ -84,6 +97,8 @@ final class ComicCell: UITableViewCell {
             thumbNailImageView.topAnchor.constraint(equalTo: topAnchor),
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            thumbNailImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 800),
+//            thumbNailImageView.heightAnchor.constraint(equalTo: widthAnchor),
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
@@ -101,7 +116,7 @@ final class ComicCell: UITableViewCell {
             
             pagesCountLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
             pagesCountLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            pagesCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+            pagesCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
         ])
     }
 }

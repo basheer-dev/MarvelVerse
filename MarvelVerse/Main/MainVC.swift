@@ -113,12 +113,11 @@ final class MainVC: UIViewController {
             if self.isSideMenuActive == true {
                 self.sideMenu.frame.origin.x = 0
                 self.navigationController?.navigationBar.transform = CGAffineTransform(translationX: self.view.frame.width - 100, y: 0)
-                self.pageContentView?.transform = CGAffineTransform(translationX: self.view.frame.width - 100, y: 0)
+                self.pageContentView?.frame.origin.x = self.view.frame.width - 100
             } else {
                 self.sideMenu.frame.origin.x = -(self.view.frame.width - 100)
                 self.navigationController?.navigationBar.transform = .identity
-                self.pageContentView?.frame.origin.x = self.view.frame.width - 100
-                self.pageContentView?.transform = .identity
+                self.pageContentView?.frame.origin.x = 0
             }
         }
     }
@@ -179,6 +178,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         addChild(dest)
         view.insertSubview(dest.view, at: 0)
         pageContentView = dest.view
+        pageContentView?.frame.origin.x = view.frame.width - 100
         
         self.title = title
     }

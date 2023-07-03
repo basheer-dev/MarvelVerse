@@ -9,6 +9,7 @@ import UIKit
 
 class ComicsVC: UIViewController {
     var comics: [Comic] = []
+    var thumbnails: [Data] = []
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -18,6 +19,7 @@ class ComicsVC: UIViewController {
         
         tableView.register(ComicCell.self, forCellReuseIdentifier: ComicCell.id)
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         
         return tableView
     }()
@@ -35,7 +37,7 @@ class ComicsVC: UIViewController {
         view.addSubview(tableView)
     }
     
-    // MARK: - FETCHING DATA
+    // MARK: - DATA
     private func fetchData() {
         let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
         
@@ -78,5 +80,11 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(comic: comics[indexPath.row])
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dest = ComicDetailsVC()
+        dest.title = comics[indexPath.row].title
+        navigationController?.pushViewController(dest, animated: true)
     }
 }

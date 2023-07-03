@@ -16,13 +16,15 @@ struct ComicsData: Codable {
 }
 
 struct Comic: Codable {
+    let id: Int
     let title: String?
     let description: String?
     let pageCount: Int?
-    let thumbnail: ComicThumbnail?
+    let thumbnail: ComicImage?
+    let images: [ComicImage]
 }
 
-struct ComicThumbnail: Codable {
+struct ComicImage: Codable {
     let path: String?
     let `extension`: String?
 }

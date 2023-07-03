@@ -8,6 +8,7 @@
 import UIKit
 
 final class MainVC: UIViewController {
+    private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
     private var isSideMenuActive: Bool = false
     
@@ -22,6 +23,9 @@ final class MainVC: UIViewController {
     private let sideMenu: UIView = {
         let menu = UIView()
         menu.backgroundColor = .systemRed
+        
+        menu.layer.cornerRadius = 10
+        menu.clipsToBounds = true
         
         return menu
     }()
@@ -55,13 +59,29 @@ final class MainVC: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(test))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet.indent"), style: .plain, target: self, action: #selector(toggleSideMenu))
         
+        handleSwipes()
         configureSubviews()
+    }
+    
+    // MARK: - USER SWIPE & SUBVIEWS
+    private func handleSwipes() {
+        let directions: [UISwipeGestureRecognizer.Direction] = [.right, .left]
+        
+        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleUserSwipes))
+        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleUserSwipes))
+        
+        rightSwipeGesture.direction = directions[0]
+        leftSwipeGesture.direction = directions[1]
+        
+        view.addGestureRecognizer(rightSwipeGesture)
+        view.addGestureRecognizer(leftSwipeGesture)
     }
     
     private func configureSubviews() {
         let comicsVC = ComicsVC()
         addChild(comicsVC)
         view.addSubview(comicsVC.view)
+        pageContentView = comicsVC.view
         title = "Comics"
         
         sideMenu.frame = CGRect(x: -(view.frame.width - 100), y: 0, width: view.frame.width - 100, height: view.frame.height)
@@ -71,16 +91,34 @@ final class MainVC: UIViewController {
     }
     
     // MARK: - ACTIONS
-    @objc private func toggleSideMenu(_ sender: UIButton) {
+    @objc private func toggleSideMenu() {
         isSideMenuActive.toggle()
+        showHideSideMenu()
+    }
+    
+    @objc private func handleUserSwipes(_ sender: UISwipeGestureRecognizer) {
+        if sender.direction == .left {
+            guard isSideMenuActive == true else { return }
+            isSideMenuActive = false
+        } else if sender.direction == .right {
+            guard isSideMenuActive == false else { return }
+            isSideMenuActive = true
+        }
         
+        showHideSideMenu()
+    }
+    
+    private func showHideSideMenu() {
         UIView.animate(withDuration: 0.2) {
             if self.isSideMenuActive == true {
                 self.sideMenu.frame.origin.x = 0
                 self.navigationController?.navigationBar.transform = CGAffineTransform(translationX: self.view.frame.width - 100, y: 0)
+                self.pageContentView?.transform = CGAffineTransform(translationX: self.view.frame.width - 100, y: 0)
             } else {
                 self.sideMenu.frame.origin.x = -(self.view.frame.width - 100)
                 self.navigationController?.navigationBar.transform = .identity
+                self.pageContentView?.frame.origin.x = self.view.frame.width - 100
+                self.pageContentView?.transform = .identity
             }
         }
     }
@@ -140,6 +178,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         
         addChild(dest)
         view.insertSubview(dest.view, at: 0)
+        pageContentView = dest.view
         
         self.title = title
     }

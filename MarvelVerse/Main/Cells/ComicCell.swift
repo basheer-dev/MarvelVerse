@@ -21,7 +21,7 @@ final class ComicCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.configuration = .tinted()
+        button.configuration = .plain()
         button.configuration?.image = UIImage(systemName: "star")
         button.configuration?.baseForegroundColor = .systemRed
         
@@ -33,7 +33,7 @@ final class ComicCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "This is a Marvel comic"
         
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .systemFont(ofSize: 16, weight: .bold)
         
         return label
     }()
@@ -42,6 +42,8 @@ final class ComicCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "This is a description and I have no idea what the hell I'm writing. I guess my name is Basheer and I hate going to college."
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .systemGray
         label.numberOfLines = 3
         label.lineBreakMode = .byTruncatingTail
         
@@ -52,6 +54,9 @@ final class ComicCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Pages: 112"
+        
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.textColor = .systemRed
         
         return label
     }()
@@ -80,18 +85,19 @@ final class ComicCell: UITableViewCell {
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 5),
+            saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             saveButton.widthAnchor.constraint(equalToConstant: 20),
             saveButton.heightAnchor.constraint(equalToConstant: 20),
             
-            titleLabel.topAnchor.constraint(equalTo: saveButton.topAnchor),
+//            titleLabel.topAnchor.constraint(equalTo: saveButton.topAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: saveButton.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            titleLabel.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -10),
             
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
             pagesCountLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
             pagesCountLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),

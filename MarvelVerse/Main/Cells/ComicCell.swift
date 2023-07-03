@@ -35,6 +35,7 @@ final class ComicCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .systemRed
         
         return label
     }()
@@ -57,7 +58,7 @@ final class ComicCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.font = .systemFont(ofSize: 10, weight: .bold)
-        label.textColor = .systemRed
+        label.textColor = .label
         
         return label
     }()

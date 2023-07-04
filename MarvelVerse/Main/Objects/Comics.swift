@@ -20,11 +20,18 @@ struct Comic: Codable {
     let title: String?
     let description: String?
     let pageCount: Int?
+    let format: String?
     let thumbnail: ComicImage?
-    let images: [ComicImage]
+    let images: [ComicImage]?
+    let dates: [ComicDate]?
 }
 
 struct ComicImage: Codable {
     let path: String?
     let `extension`: String?
+}
+
+struct ComicDate: Codable {
+    let type: String?
+    let date: String?
 }

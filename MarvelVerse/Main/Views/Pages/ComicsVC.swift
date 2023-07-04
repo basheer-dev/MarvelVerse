@@ -84,7 +84,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dest = ComicDetailsVC()
-        dest.title = comics[indexPath.row].title
+//        dest.title = comics[indexPath.row].title
         dest.set(comic: comics[indexPath.row])
         navigationController?.pushViewController(dest, animated: true)
     }

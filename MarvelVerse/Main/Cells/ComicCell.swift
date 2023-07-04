@@ -82,13 +82,7 @@ final class ComicCell: UITableViewCell {
         thumbNailImageView.image = .none
         
         /// Handling the description
-        descriptionLabel.text = "No available description"
-        
-        if let descriptionText = comic.description {
-            if !descriptionText.isEmpty {
-                descriptionLabel.text = descriptionText.replacingOccurrences(of: "&#39;", with: "'").replacingOccurrences(of: "&ndash;", with: "&").replacingOccurrences(of: "32 PGS./MARVEL PSR...$3.50", with: "").trimmingCharacters(in: .whitespaces).trimmingCharacters(in: .newlines)
-            }
-        }
+        descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
         
         /// Getting the thumbnail image
         URLManager.shared.getComicImageData(comicImage: comic.thumbnail) {

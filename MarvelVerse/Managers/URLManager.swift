@@ -10,6 +10,7 @@ import Foundation
 class URLManager {
     
     static let shared = URLManager()
+    let dateFormatter = ISO8601DateFormatter()
     
     func getComicImageData(comicImage: ComicImage?, completionBlock: @escaping (Data) -> Void) {
         guard let comicImage = comicImage else { return }
@@ -27,5 +28,34 @@ class URLManager {
                 }
             }
         }
+    }
+    
+    func getDescription(description: String?) -> String {
+        guard let description = description,
+              !description.isEmpty else { return "No Available Description"}
+        
+        return description.replacingOccurrences(of: "&#39;", with: "'").replacingOccurrences(of: "&ndash;", with: "&").replacingOccurrences(of: "32 PGS./MARVEL PSR...$3.50", with: "").trimmingCharacters(in: .whitespaces).trimmingCharacters(in: .newlines)
+    }
+    
+    func getPubDate(from dates: [ComicDate]?) -> String {
+        guard let dates = dates else { return "Date Not Defined"}
+        
+        for date in dates {
+            if date.type == "onsaleDate" {
+                if let dateString = date.date {
+                    if let pubDate = dateFormatter.date(from: dateString) {
+                        
+                        let year = Calendar.current.component(.year, from: pubDate)
+                        let month = Calendar.current.component(.month, from: pubDate)
+                        let day = Calendar.current.component(.day, from: pubDate)
+                        
+                        return String(format: "%02d/%02d/%02d", day, month, year)
+                    }
+                    
+                }
+            }
+        }
+        
+        return "Date Not Defined"
     }
 }

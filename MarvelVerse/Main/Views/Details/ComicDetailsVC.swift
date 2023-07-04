@@ -8,6 +8,7 @@
 import UIKit
 
 class ComicDetailsVC: UIViewController {
+    var comicImages: [ComicImage] = []
     
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -21,8 +22,7 @@ class ComicDetailsVC: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 10
-        layout.itemSize.height = 400
+        layout.minimumLineSpacing = 15
         collectionView.setCollectionViewLayout(layout, animated: true)
         
         collectionView.delegate = self
@@ -30,6 +30,7 @@ class ComicDetailsVC: UIViewController {
         
         collectionView.register(ComicImageCell.self, forCellWithReuseIdentifier: ComicImageCell.id)
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
         
         return collectionView
     }()
@@ -51,6 +52,16 @@ class ComicDetailsVC: UIViewController {
         configureLayouts()
     }
     
+    func set(comic: Comic) {
+        
+        /// Getting the comic's thumbnail and related images
+        if let thumbnail = comic.thumbnail {
+            comicImages.append(thumbnail)
+        }
+        comicImages += comic.images
+        collectionView.reloadData()
+    }
+    
     // MARK: - ACTIONS
     @objc private func didTapSave() {
         
@@ -69,15 +80,21 @@ class ComicDetailsVC: UIViewController {
 
 
 // MARK: - COLLECTIONVIEW EXT
-extension ComicDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ComicDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 100
+        return comicImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicImageCell.id, for: indexPath) as? ComicImageCell else { fatalError() }
+        cell.set(image: comicImages[indexPath.row])
+        cell.contentMode = .scaleAspectFill
                 
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 270, height: 400)
     }
 }

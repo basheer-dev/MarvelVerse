@@ -12,11 +12,11 @@ class ComicImageCell: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.layer.cornerRadius = 10
-        imageView.layer.borderColor = UIColor.systemGray6.cgColor
-        imageView.layer.borderWidth = 1
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 5
         
         return imageView
     }()
@@ -32,9 +32,27 @@ class ComicImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func set(image: ComicImage) {
+        URLManager.shared.getComicImageData(comicImage: image) {
+            [weak self] data in
+            DispatchQueue.main.async {
+                let image = UIImage(data: data)
+                self?.imageView.image = image
+//                print(image?.size)
+                // TODO: FIX LATER
+            }
+        }
+    }
+    
     // MARK: - SUBVIEWS
     private func configureSubviews() {
-        imageView.frame = bounds
         addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
     }
 }

@@ -91,20 +91,10 @@ final class ComicCell: UITableViewCell {
         }
         
         /// Getting the thumbnail image
-        if let thumbnailImagePath = comic.thumbnail?.path as? String {
-            if let thumbnailImageExt = comic.thumbnail?.extension as? String {
-                let thumbnailImageUrlString = thumbnailImagePath.replacingOccurrences(of: "http://", with: "https://") + "." + thumbnailImageExt
-                
-                if let thumbnailImageUrl = URL(string: thumbnailImageUrlString) {
-                    URLSession.shared.dataTask(with: thumbnailImageUrl) {
-                        [weak self] data, _, error in
-                        guard error == nil,
-                              let data = data else { return }
-                        DispatchQueue.main.async {
-                            self?.thumbNailImageView.image = UIImage(data: data)
-                        }
-                    }.resume()
-                }
+        URLManager.shared.getComicImageData(comicImage: comic.thumbnail) {
+            [weak self] data in
+            DispatchQueue.main.async {
+                self?.thumbNailImageView.image = UIImage(data: data)
             }
         }
     }

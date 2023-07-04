@@ -21,6 +21,7 @@
 		3AC40C952A53219C001A97EB /* ComicDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40C942A53219C001A97EB /* ComicDetailsVC.swift */; };
 		3AC40C972A533A47001A97EB /* ComicImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40C962A533A47001A97EB /* ComicImageCell.swift */; };
 		3AD680A02A4FF2090080D6DD /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD6809F2A4FF2090080D6DD /* APIConfig.swift */; };
+		3AF057D82A53D8CC009C506B /* URLManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF057D72A53D8CC009C506B /* URLManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		3AC40C942A53219C001A97EB /* ComicDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailsVC.swift; sourceTree = "<group>"; };
 		3AC40C962A533A47001A97EB /* ComicImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicImageCell.swift; sourceTree = "<group>"; };
 		3AD6809F2A4FF2090080D6DD /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
+		3AF057D72A53D8CC009C506B /* URLManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			children = (
 				3A6FA4222A4F2054001C104E /* Delegates */,
 				3A6FA4262A4F209C001C104E /* Main */,
+				3AF057D62A53D8B5009C506B /* Managers */,
 				3A6FA4232A4F2072001C104E /* Media */,
 				3A6FA41C2A4F1C2E001C104E /* Info.plist */,
 			);
@@ -153,6 +156,14 @@
 				3AC40C942A53219C001A97EB /* ComicDetailsVC.swift */,
 			);
 			path = Details;
+			sourceTree = "<group>";
+		};
+		3AF057D62A53D8B5009C506B /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				3AF057D72A53D8CC009C506B /* URLManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +239,7 @@
 				3A0D7CA22A5151600061E3A5 /* CharactersVC.swift in Sources */,
 				3A0D7CA42A51B5FF0061E3A5 /* SeriesVC.swift in Sources */,
 				3A6FA40F2A4F1C2C001C104E /* AppDelegate.swift in Sources */,
+				3AF057D82A53D8CC009C506B /* URLManager.swift in Sources */,
 				3A0D7CA92A51D4260061E3A5 /* ComicCell.swift in Sources */,
 				3A08C7362A501D800085131B /* MainVC.swift in Sources */,
 				3AC40C952A53219C001A97EB /* ComicDetailsVC.swift in Sources */,

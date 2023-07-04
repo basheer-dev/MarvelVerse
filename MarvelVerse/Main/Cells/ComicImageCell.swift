@@ -17,6 +17,8 @@ class ComicImageCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 5
+        imageView.layer.borderColor = UIColor.systemGray6.cgColor
+        imageView.layer.borderWidth = 1
         
         return imageView
     }()

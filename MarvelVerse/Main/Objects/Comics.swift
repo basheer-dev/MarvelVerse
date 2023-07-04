@@ -19,6 +19,7 @@ struct Comic: Codable {
     let id: Int
     let title: String?
     let description: String?
+    let modified: String?
     let pageCount: Int?
     let format: String?
     let thumbnail: ComicImage?

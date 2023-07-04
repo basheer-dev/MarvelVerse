@@ -37,6 +37,20 @@ class URLManager {
         return description.replacingOccurrences(of: "&#39;", with: "'").replacingOccurrences(of: "&ndash;", with: "&").replacingOccurrences(of: "32 PGS./MARVEL PSR...$3.50", with: "").trimmingCharacters(in: .whitespaces).trimmingCharacters(in: .newlines)
     }
     
+    func getDate(from dateString: String?) -> String {
+        if let dateString = dateString {
+            if let date = dateFormatter.date(from: dateString) {
+                let year = Calendar.current.component(.year, from: date)
+                let month = Calendar.current.component(.month, from: date)
+                let day = Calendar.current.component(.day, from: date)
+                
+                return String(format: "%02d/%02d/%02d", day, month, year)
+            }
+        }
+        
+        return "Date Not Defined"
+    }
+    
     func getPubDate(from dates: [ComicDate]?) -> String {
         guard let dates = dates else { return "Date Not Defined"}
         

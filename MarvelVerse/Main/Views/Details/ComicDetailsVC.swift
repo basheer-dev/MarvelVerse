@@ -76,7 +76,7 @@ class ComicDetailsVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.font = .systemFont(ofSize: 10, weight: .bold)
-        label.textColor = .systemRed
+        label.textColor = .label
         label.textAlignment = .right
         
         return label
@@ -104,6 +104,40 @@ class ComicDetailsVC: UIViewController {
         label.font = .systemFont(ofSize: 12, weight: .bold)
         
         return label
+    }()
+    
+    let modificationDateTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Modified"
+        
+        label.textColor = .label
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        
+        return label
+    }()
+    
+    let modificationDate: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.numberOfLines = 0
+        label.textColor = .systemGray
+        label.textAlignment = .justified
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        
+        return label
+    }()
+    
+    let datesSeparator: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.backgroundColor = .systemRed
+        view.layer.cornerRadius = 2.5
+        
+        return view
     }()
     
     let descriptionTitleLabel: UILabel = {
@@ -156,6 +190,9 @@ class ComicDetailsVC: UIViewController {
         scrollView.addSubview(pagesCountLabel)
         scrollView.addSubview(dateTitleLabel)
         scrollView.addSubview(dateLabel)
+        scrollView.addSubview(modificationDateTitle)
+        scrollView.addSubview(modificationDate)
+        scrollView.addSubview(datesSeparator)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(testButton)
@@ -170,6 +207,7 @@ class ComicDetailsVC: UIViewController {
         formatLabel.text = "Format | \(comic.format ?? "Not specified")"
         pagesCountLabel.text = "Pages: \(comic.pageCount ?? 0)"
         dateLabel.text = URLManager.shared.getPubDate(from: comic.dates)
+        modificationDate.text = URLManager.shared.getDate(from: comic.modified)
         descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
         
         /// Getting the comic's thumbnail and related images
@@ -217,11 +255,21 @@ class ComicDetailsVC: UIViewController {
             
             dateTitleLabel.topAnchor.constraint(equalTo: pagesCountLabel.bottomAnchor, constant: 50),
             dateTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            dateTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             
             dateLabel.topAnchor.constraint(equalTo: dateTitleLabel.bottomAnchor, constant: 5),
             dateLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            
+            modificationDateTitle.topAnchor.constraint(equalTo: pagesCountLabel.bottomAnchor, constant: 50),
+            modificationDateTitle.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            
+            modificationDate.topAnchor.constraint(equalTo: dateTitleLabel.bottomAnchor, constant: 5),
+            modificationDate.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            modificationDate.leadingAnchor.constraint(equalTo: modificationDateTitle.leadingAnchor),
+            
+            datesSeparator.topAnchor.constraint(equalTo: dateTitleLabel.topAnchor),
+            datesSeparator.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor),
+            datesSeparator.widthAnchor.constraint(equalToConstant: 5),
+            datesSeparator.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
             descriptionTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),
             descriptionTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),

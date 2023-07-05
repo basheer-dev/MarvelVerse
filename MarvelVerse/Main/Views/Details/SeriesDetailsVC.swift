@@ -69,7 +69,7 @@ class SeriesDetailsVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.font = .systemFont(ofSize: 10, weight: .bold)
-        label.textColor = .label
+        label.textColor = .systemGray
         label.textAlignment = .right
         
         return label
@@ -233,6 +233,7 @@ class SeriesDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -100)
         ])
     }
 }

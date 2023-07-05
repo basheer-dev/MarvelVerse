@@ -76,7 +76,7 @@ class ComicDetailsVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.font = .systemFont(ofSize: 10, weight: .bold)
-        label.textColor = .label
+        label.textColor = .systemGray
         label.textAlignment = .right
         
         return label

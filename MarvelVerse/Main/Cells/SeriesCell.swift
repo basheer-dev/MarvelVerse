@@ -1,22 +1,21 @@
 //
-//  ComicCell.swift
+//  SeriesCell.swift
 //  MarvelVerse
 //
-//  Created by Basheer Abdulmalik on 02/07/2023.
+//  Created by Basheer Abdulmalik on 05/07/2023.
 //
 
 import UIKit
 
-final class ComicCell: UITableViewCell {
-    static let id: String = "ComicContainer"
+class SeriesCell: UITableViewCell {
+    static let id = "SeriesContainer"
     
-    private let thumbNailImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-
-        imageView.isUserInteractionEnabled = true
+    private let seriesImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         
-        return imageView
+        view.backgroundColor = .systemMint
+        return view
     }()
     
     private let saveButton: UIButton = {
@@ -34,9 +33,6 @@ final class ComicCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.font = .systemFont(ofSize: 16, weight: .bold)
-        label.textColor = .systemRed
-        
         return label
     }()
     
@@ -53,7 +49,7 @@ final class ComicCell: UITableViewCell {
         return label
     }()
     
-    private let pagesCountLabel: UILabel = {
+    private let ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -62,66 +58,49 @@ final class ComicCell: UITableViewCell {
         
         return label
     }()
-        
+    
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
         contentView.isUserInteractionEnabled = true
+        selectionStyle = .none
         
         configureSubviews()
+    }
+    
+    func set(series: Series) {
+        titleLabel.text = series.title
+        descriptionLabel.text = URLManager.shared.getDescription(description: series.description)
+        ratingLabel.text = URLManager.shared.getRating(rating: series.rating)
+        
+        /// Getting the series image
+        URLManager.shared.getAPIImageData(image: series.thumbnail) {
+            [weak self] data in
+            DispatchQueue.main.async {
+                self?.seriesImageView.image = UIImage(data: data)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(comic: Comic) {
-        titleLabel.text = comic.title
-        pagesCountLabel.text = "Pages: \(comic.pageCount ?? 0)"
-        thumbNailImageView.image = .none
-        
-        /// Handling the description
-        descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
-        
-        /// Getting the thumbnail image
-        URLManager.shared.getAPIImageData(image: comic.thumbnail) {
-            [weak self] data in
-            DispatchQueue.main.async {
-                self?.thumbNailImageView.image = UIImage(data: data)
-            }
-        }
-    }
-    
-    // MARK: - ACTIONS
-    @objc private func saveButtonTapped() {
-        print("save")
-    }
-    
-    @objc private func didTapComic() {
-        print(titleLabel.text ?? "")
-    }
-    
-    // MARK: - SUBVIEWS
+    // MARK: -  SUBVIEWS
     private func configureSubviews() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
-        thumbNailImageView.isUserInteractionEnabled = true
-        thumbNailImageView.addGestureRecognizer(tapGesture)
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        
-        addSubview(thumbNailImageView)
+        addSubview(seriesImageView)
         addSubview(saveButton)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
-        addSubview(pagesCountLabel)
+        addSubview(ratingLabel)
         
         NSLayoutConstraint.activate([
-            thumbNailImageView.topAnchor.constraint(equalTo: topAnchor),
-            thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            thumbNailImageView.heightAnchor.constraint(equalToConstant: 500),
+            seriesImageView.topAnchor.constraint(equalTo: topAnchor),
+            seriesImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            seriesImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            seriesImageView.heightAnchor.constraint(equalTo: widthAnchor),
             
-            saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
+            saveButton.topAnchor.constraint(equalTo: seriesImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             saveButton.widthAnchor.constraint(equalToConstant: 20),
             saveButton.heightAnchor.constraint(equalToConstant: 20),
@@ -134,9 +113,9 @@ final class ComicCell: UITableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            pagesCountLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
-            pagesCountLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            pagesCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
+            ratingLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
+            ratingLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            ratingLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
         ])
     }
 }

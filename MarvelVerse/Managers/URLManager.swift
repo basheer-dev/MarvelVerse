@@ -12,10 +12,16 @@ class URLManager {
     static let shared = URLManager()
     let dateFormatter = ISO8601DateFormatter()
     
-    func getComicImageData(comicImage: ComicImage?, completionBlock: @escaping (Data) -> Void) {
-        guard let comicImage = comicImage else { return }
-        if let imagePath = comicImage.path {
-            if let imageExtension = comicImage.extension {
+    
+    func getAPIData(from urlString: String) {
+        
+    }
+    
+    
+    func getAPIImageData(image: APIImage?, completionBlock: @escaping (Data) -> Void) {
+        guard let image = image else { return }
+        if let imagePath = image.path {
+            if let imageExtension = image.extension {
                 let imageURLString = imagePath.replacingOccurrences(of: "http://", with: "https://") + "." + imageExtension
                                 
                 if let imageURL = URL(string: imageURLString) {
@@ -30,12 +36,14 @@ class URLManager {
         }
     }
     
+    
     func getDescription(description: String?) -> String {
         guard let description = description,
               !description.isEmpty else { return "No Available Description"}
         
         return description.replacingOccurrences(of: "&#39;", with: "'").replacingOccurrences(of: "&ndash;", with: "&").replacingOccurrences(of: "32 PGS./MARVEL PSR...$3.50", with: "").trimmingCharacters(in: .whitespaces).trimmingCharacters(in: .newlines)
     }
+    
     
     func getDate(from dateString: String?) -> String {
         if let dateString = dateString {
@@ -51,7 +59,10 @@ class URLManager {
         return "Date Not Defined"
     }
     
-    func getPubDate(from dates: [ComicDate]?) -> String {
+    
+    func getPubDate(from dates: [APIDate]?) -> String {
+        // Used with comics only
+        
         guard let dates = dates else { return "Date Not Defined"}
         
         for date in dates {
@@ -71,5 +82,16 @@ class URLManager {
         }
         
         return "Date Not Defined"
+    }
+    
+    
+    func getRating(rating: String?) -> String {
+        guard let rating = rating else { return "Rating | Not Defined" }
+        
+        if !rating.isEmpty {
+            return "Rating | \(rating)"
+        }
+        
+        return "Rating | Not Defined"
     }
 }

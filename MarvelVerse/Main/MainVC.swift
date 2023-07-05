@@ -178,6 +178,8 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         view.insertSubview(dest.view, at: 0)
         pageContentView = dest.view
         pageContentView?.frame.origin.x = view.frame.width - 100
+        isSideMenuActive = false
+        showHideSideMenu()
         
         self.title = title
     }

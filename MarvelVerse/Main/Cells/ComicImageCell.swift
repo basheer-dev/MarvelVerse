@@ -34,8 +34,8 @@ class ComicImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(image: ComicImage) {
-        URLManager.shared.getComicImageData(comicImage: image) {
+    func set(image: APIImage) {
+        URLManager.shared.getAPIImageData(image: image) {
             [weak self] data in
             DispatchQueue.main.async {
                 let image = UIImage(data: data)

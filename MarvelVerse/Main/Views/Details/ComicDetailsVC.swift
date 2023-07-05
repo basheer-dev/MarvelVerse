@@ -8,7 +8,7 @@
 import UIKit
 
 class ComicDetailsVC: UIViewController {
-    var comicImages: [ComicImage] = []
+    var comicImages: [APIImage] = []
     
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()

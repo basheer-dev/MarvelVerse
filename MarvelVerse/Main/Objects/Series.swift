@@ -21,6 +21,8 @@ struct Series: Codable {
     let description: String?
     let startYear: Int?
     let endYear: Int?
+    let modified: String?
     let rating: String?
+    let type: String?
     let thumbnail: APIImage?
 }

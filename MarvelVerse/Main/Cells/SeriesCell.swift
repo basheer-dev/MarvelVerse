@@ -33,6 +33,9 @@ class SeriesCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
+        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .systemRed
+        
         return label
     }()
     
@@ -69,9 +72,9 @@ class SeriesCell: UITableViewCell {
     }
     
     func set(series: Series) {
-        titleLabel.text = series.title
+        titleLabel.text = URLManager.shared.getTitle(from: series.title)
         descriptionLabel.text = URLManager.shared.getDescription(description: series.description)
-        ratingLabel.text = URLManager.shared.getRating(rating: series.rating)
+        ratingLabel.text = "Rating | \(URLManager.shared.getAPIStringInfo(from: series.rating))"
         
         /// Getting the series image
         URLManager.shared.getAPIImageData(image: series.thumbnail) {

@@ -82,87 +82,25 @@ class ComicDetailsVC: UIViewController {
         return label
     }()
     
-    let dateTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Published"
-        
-        label.textColor = .label
-        label.textAlignment = .left
-        label.font = .systemFont(ofSize: 18, weight: .bold)
-        
-        return label
-    }()
+    lazy var dateTitleLabel: UILabel = getTitleLabel(title: "Published")
+    lazy var modificationDateTitle: UILabel = getTitleLabel(title: "Modified")
     
-    let dateLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.numberOfLines = 0
-        label.textColor = .systemGray
-        label.textAlignment = .justified
-        label.font = .systemFont(ofSize: 12, weight: .bold)
-        
-        return label
-    }()
-    
-    let modificationDateTitle: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Modified"
-        
-        label.textColor = .label
-        label.textAlignment = .left
-        label.font = .systemFont(ofSize: 18, weight: .bold)
-        
-        return label
-    }()
-    
-    let modificationDate: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.numberOfLines = 0
-        label.textColor = .systemGray
-        label.textAlignment = .justified
-        label.font = .systemFont(ofSize: 12, weight: .bold)
-        
-        return label
-    }()
+    lazy var dateLabel: UILabel = getSubTitleLabel()
+    lazy var modificationDate: UILabel = getSubTitleLabel()
     
     let datesSeparator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.backgroundColor = .systemRed
-        view.layer.cornerRadius = 2.5
+        view.layer.cornerRadius = 1
         
         return view
     }()
     
-    let descriptionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "About"
-        
-        label.textColor = .label
-        label.textAlignment = .left
-        label.font = .systemFont(ofSize: 18, weight: .bold)
-        
-        return label
-    }()
+    lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
     
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.numberOfLines = 0
-        label.textColor = .systemGray
-        label.textAlignment = .justified
-        label.font = .systemFont(ofSize: 14)
-        
-        return label
-    }()
+    lazy var descriptionLabel: UILabel = getSubTitleLabel(size: 14)
     
     let testButton: UIButton = {
         let button = UIButton()
@@ -174,6 +112,30 @@ class ComicDetailsVC: UIViewController {
         
         return button
     }()
+    
+    private func getTitleLabel(title: String) -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = title
+        
+        label.textColor = .label
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        
+        return label
+    }
+    
+    private func getSubTitleLabel(size: CGFloat = 12) -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.numberOfLines = 0
+        label.textColor = .systemGray
+        label.textAlignment = .justified
+        label.font = .systemFont(ofSize: size, weight: .bold)
+        
+        return label
+    }
     
     // MARK: - VDL
     override func viewDidLoad() {
@@ -203,9 +165,9 @@ class ComicDetailsVC: UIViewController {
     }
     
     func set(comic: Comic) {
-        titleLabel.text = comic.title
+        titleLabel.text = URLManager.shared.getTitle(from: comic.title)
         formatLabel.text = "Format | \(comic.format ?? "Not specified")"
-        pagesCountLabel.text = "Pages: \(comic.pageCount ?? 0)"
+        pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
         dateLabel.text = URLManager.shared.getPubDate(from: comic.dates)
         modificationDate.text = URLManager.shared.getDate(from: comic.modified)
         descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
@@ -264,11 +226,10 @@ class ComicDetailsVC: UIViewController {
             
             modificationDate.topAnchor.constraint(equalTo: dateTitleLabel.bottomAnchor, constant: 5),
             modificationDate.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            modificationDate.leadingAnchor.constraint(equalTo: modificationDateTitle.leadingAnchor),
             
             datesSeparator.topAnchor.constraint(equalTo: dateTitleLabel.topAnchor),
             datesSeparator.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor),
-            datesSeparator.widthAnchor.constraint(equalToConstant: 5),
+            datesSeparator.widthAnchor.constraint(equalToConstant: 2),
             datesSeparator.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
             descriptionTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),

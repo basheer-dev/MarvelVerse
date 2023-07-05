@@ -13,8 +13,14 @@ class URLManager {
     let dateFormatter = ISO8601DateFormatter()
     
     
-    func getAPIData(from urlString: String) {
+    func getTitle(from title: String?) -> String {
+        guard let title = title else { return "No Available Title" }
         
+        if !title.isEmpty {
+            return title.trimmingCharacters(in: .whitespaces).trimmingCharacters(in: .newlines)
+        }
+        
+        return "No Available Title"
     }
     
     
@@ -84,14 +90,21 @@ class URLManager {
         return "Date Not Defined"
     }
     
-    
-    func getRating(rating: String?) -> String {
-        guard let rating = rating else { return "Rating | Not Defined" }
+    func getYear(from year: Int?) -> String {
+        guard let year = year else { return "Not Defined"}
         
-        if !rating.isEmpty {
-            return "Rating | \(rating)"
+        return String(year)
+    }
+    
+    
+    func getAPIStringInfo(from info: String?) -> String {
+        // Used for type and rating in series
+        guard let info = info else { return "Not Defined" }
+        
+        if !info.isEmpty {
+            return info
         }
         
-        return "Rating | Not Defined"
+        return "Not Defined"
     }
 }

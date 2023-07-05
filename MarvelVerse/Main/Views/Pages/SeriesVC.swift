@@ -82,4 +82,11 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dest = SeriesDetailsVC()
+        dest.set(series: allSeries[indexPath.row])
+        
+        navigationController?.pushViewController(dest, animated: true)
+    }
 }

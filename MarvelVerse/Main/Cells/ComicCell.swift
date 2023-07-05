@@ -77,8 +77,8 @@ final class ComicCell: UITableViewCell {
     }
     
     func set(comic: Comic) {
-        titleLabel.text = comic.title
-        pagesCountLabel.text = "Pages: \(comic.pageCount ?? 0)"
+        titleLabel.text = URLManager.shared.getTitle(from: comic.title)
+        pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
         thumbNailImageView.image = .none
         
         /// Handling the description

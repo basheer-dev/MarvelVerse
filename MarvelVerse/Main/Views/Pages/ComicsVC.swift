@@ -7,10 +7,11 @@
 
 import UIKit
 
-class ComicsVC: UIViewController {
-    var comics: [Comic] = []
-    var thumbnails: [Data] = []
-    
+
+final class ComicsVC: UIViewController {
+    private var comics: [Comic] = []
+    private var thumbnails: [Int: Data] = [:]
+        
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         
@@ -28,8 +29,9 @@ class ComicsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
         
-        fetchData()
+        fetchData(from: urlString)
     }
     
     override func viewDidLayoutSubviews() {
@@ -38,8 +40,8 @@ class ComicsVC: UIViewController {
     }
     
     // MARK: - DATA
-    private func fetchData() {
-        let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
+    private func fetchData(from urlString: String, offset: Int = 3) {
+        let urlString = urlString + "&offset=\(offset)"
         
         DispatchQueue.global(qos: .userInteractive).async {
             [weak self] in
@@ -55,11 +57,15 @@ class ComicsVC: UIViewController {
     private func parseJSON(json: Data) {
         let jsonDecoder = JSONDecoder()
         if let jsonComics = try? jsonDecoder.decode(Comics.self, from: json) {
-            comics = jsonComics.data.results
+            let parsedComics = jsonComics.data.results
             
             DispatchQueue.main.async {
                 [weak self] in
-                self?.tableView.reloadData()
+                guard let strongSelf = self else { return }
+                for comic in parsedComics {
+                    self?.comics.append(comic)
+                    self?.tableView.insertRows(at: [IndexPath(row: strongSelf.comics.count - 1, section: 0)], with: .automatic)
+                }
             }
         } else {
             print("couldn't parse json")
@@ -79,6 +85,24 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ComicCell.id, for: indexPath) as? ComicCell else { fatalError() }
         cell.set(comic: comics[indexPath.row])
         
+        /// Getting the thumbnail image
+        cell.thumbNailImageView.image = .none
+        
+        if thumbnails[comics[indexPath.row].id] != nil {
+            cell.thumbNailImageView.image = UIImage(data: thumbnails[comics[indexPath.row].id]!)
+        } else {
+            URLManager.shared.getAPIImageData(image: comics[indexPath.row].thumbnail) {
+                [weak self] data in
+                DispatchQueue.main.async {
+                    cell.thumbNailImageView.image = UIImage(data: data)
+                    
+                    if let comicId = self?.comics[indexPath.row].id {
+                        self?.thumbnails[comicId] = data
+                    }
+                }
+            }
+        }
+        
         return cell
     }
     
@@ -87,5 +111,24 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         dest.set(comic: comics[indexPath.row])
         
         navigationController?.pushViewController(dest, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == comics.count - 1 {
+            /// The user has reached the bottom
+            /// Get more data
+            let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
+            
+            fetchData(from: urlString, offset: comics.count)
+            
+//            DispatchQueue.global(qos: .userInteractive).async {
+//                [weak self] in
+//                if let url = URL(string: urlString) {
+//                    if let data = try? Data(contentsOf: url) {
+//                        self?.parseJSON(json: data)
+//                    }
+//                }
+//            }
+        }
     }
 }

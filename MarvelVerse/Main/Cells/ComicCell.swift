@@ -10,7 +10,7 @@ import UIKit
 final class ComicCell: UITableViewCell {
     static let id: String = "ComicContainer"
     
-    private let thumbNailImageView: UIImageView = {
+    let thumbNailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -85,12 +85,12 @@ final class ComicCell: UITableViewCell {
         descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
         
         /// Getting the thumbnail image
-        URLManager.shared.getAPIImageData(image: comic.thumbnail) {
-            [weak self] data in
-            DispatchQueue.main.async {
-                self?.thumbNailImageView.image = UIImage(data: data)
-            }
-        }
+//        URLManager.shared.getAPIImageData(image: comic.thumbnail) {
+//            [weak self] data in
+//            DispatchQueue.main.async {
+//                self?.thumbNailImageView.image = UIImage(data: data)
+//            }
+//        }
     }
     
     // MARK: - ACTIONS

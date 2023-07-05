@@ -8,9 +8,11 @@
 import UIKit
 
 final class MainVC: UIViewController {
+    
     private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
     private var isSideMenuActive: Bool = false
+    var comicsThumbnails: [Int: Data] = [:]
     
     enum Pages: String, CaseIterable {
         case comics = "Comics"

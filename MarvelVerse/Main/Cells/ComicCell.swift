@@ -15,6 +15,8 @@ final class ComicCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         imageView.isUserInteractionEnabled = true
+        imageView.layer.borderColor = UIColor(cgColor: CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)).cgColor
+        imageView.layer.borderWidth = 1
         
         return imageView
     }()

@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol DidSearch {
+    func didSearchForComic(title: String)
+}
+
 final class MainVC: UIViewController {
+    var delegate: DidSearch?
     
     private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
@@ -19,8 +24,15 @@ final class MainVC: UIViewController {
         case series = "Series"
         case characters = "Characters"
         case stories = "Stories"
-        
     }
+    
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController()
+        searchController.searchBar.delegate = self
+        
+        
+        return searchController
+    }()
     
     private let sideMenu: UIView = {
         let menu = UIView()
@@ -54,6 +66,7 @@ final class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationItem.searchController = searchController
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .systemRed
         
@@ -80,6 +93,7 @@ final class MainVC: UIViewController {
     
     private func configureSubviews() {
         let comicsVC = ComicsVC()
+        delegate = comicsVC
         addChild(comicsVC)
         view.addSubview(comicsVC.view)
         pageContentView = comicsVC.view
@@ -124,6 +138,18 @@ final class MainVC: UIViewController {
     }
     
     @objc func test() {}
+}
+
+
+// MARK: - SEARCH BAR EXT
+extension MainVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        delegate?.didSearchForComic(title: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.placeholder = searchBar.text?.trimmingCharacters(in: .whitespaces).isEmpty == true ? "Search" : searchBar.text
+    }
 }
 
 

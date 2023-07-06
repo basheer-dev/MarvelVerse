@@ -8,7 +8,7 @@
 import Foundation
 
 struct APIImage: Codable {
-    let path: String?
+    var path: String?
     let `extension`: String?
 }
 

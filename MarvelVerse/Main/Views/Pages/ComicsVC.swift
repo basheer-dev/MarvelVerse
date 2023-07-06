@@ -11,6 +11,8 @@ import UIKit
 final class ComicsVC: UIViewController {
     private var comics: [Comic] = []
     private var thumbnails: [Int: Data] = [:]
+    private var searchTitle: String = ""
+    private var globalOffset = 0
         
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -29,25 +31,42 @@ final class ComicsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        let urlString = "https://gateway.marvel.com:443/v1/public/comics?hasDigitalIssue=false&orderBy=title&limit=20&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
         
-        fetchData(from: urlString)
+        fetchData(title: searchTitle)
     }
     
     override func viewDidLayoutSubviews() {
         tableView.frame = view.bounds
+        tableView.tableFooterView = createTableViewFooter()
         view.addSubview(tableView)
     }
     
+    private func createTableViewFooter() -> UIView {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
+        activityIndicator.startAnimating()
+        
+        return activityIndicator
+    }
+    
     // MARK: - DATA
-    private func fetchData(from urlString: String, offset: Int = 0) {
-        let urlString = urlString + "&offset=\(offset)"
+    private func fetchData(title: String = "", offset: Int = 0) {
+        var urlString = "https://gateway.marvel.com:443/v1/public/comics"
+        urlString += URLManager.shared.getAPIUserKey()
+        
+        if offset > 0 {
+            urlString += "&offset=\(offset)&limit=20"
+        }
+        
+        if !title.trimmingCharacters(in: .whitespaces).isEmpty {
+            urlString += "&orderBy=title&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+        }
         
         DispatchQueue.global(qos: .userInteractive).async {
             [weak self] in
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
-                    // parse JSON
+                    // Ok to parse
                     self?.parseJSON(json: data)
                 }
             }
@@ -55,23 +74,39 @@ final class ComicsVC: UIViewController {
     }
     
     private func parseJSON(json: Data) {
-        let jsonDecoder = JSONDecoder()
-        if let jsonComics = try? jsonDecoder.decode(Comics.self, from: json) {
-            let parsedComics = jsonComics.data.results
+        let decoder = JSONDecoder()
+        
+        if let APIData = try? decoder.decode(Comics.self, from: json) {
+            let APIComics = APIData.data.results
             
             DispatchQueue.main.async {
                 [weak self] in
-                guard let strongSelf = self else { return }
-                for comic in parsedComics {
-                    if strongSelf.comics.contains(where: { $0.id == comic.id }) == false {
-                        self?.comics.append(comic)
-                        self?.tableView.insertRows(at: [IndexPath(row: strongSelf.comics.count - 1, section: 0)], with: .automatic)
-                    } else {
-                        print("found a repetitive item")
+                guard let self = self else { return }
+                for comic in APIComics {
+                    if self.comics.contains(where: { $0.id == comic.id }) == false && comic.thumbnail?.path?.contains("/image_not_available") == false {
+                        self.comics.append(comic)
+                        self.tableView.insertRows(at: [IndexPath(row: self.comics.count - 1, section: 0)], with: .automatic)
                     }
                 }
             }
         }
+    }
+}
+
+
+// MARK: DIDSEARCH EXT
+extension ComicsVC: DidSearch {
+    
+    func didSearchForComic(title: String) {
+        clearData()
+        searchTitle = title
+        fetchData(title: searchTitle)
+    }
+    
+    private func clearData() {
+        thumbnails.removeAll()
+        comics.removeAll()
+        tableView.reloadData()
     }
 }
 
@@ -95,11 +130,12 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         } else {
             URLManager.shared.getAPIImageData(image: comics[indexPath.row].thumbnail) {
                 [weak self] data in
+                guard let strongSelf = self else { return }
                 DispatchQueue.main.async {
                     cell.thumbNailImageView.image = UIImage(data: data)
                     
-                    if let comicId = self?.comics[indexPath.row].id {
-                        self?.thumbnails[comicId] = data
+                    if strongSelf.comics.count > indexPath.row {
+                        self?.thumbnails[strongSelf.comics[indexPath.row].id] = data
                     }
                 }
             }
@@ -119,18 +155,13 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == comics.count - 1 {
             /// The user has reached the bottom
             /// Get more data
-            let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
-            
-            fetchData(from: urlString, offset: comics.count)
-            
-//            DispatchQueue.global(qos: .userInteractive).async {
-//                [weak self] in
-//                if let url = URL(string: urlString) {
-//                    if let data = try? Data(contentsOf: url) {
-//                        self?.parseJSON(json: data)
-//                    }
-//                }
-//            }
+            ///
+            if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
+                globalOffset += comics.count
+                fetchData(offset: globalOffset)
+            } else {
+                fetchData(title: searchTitle, offset: comics.count)
+            }
         }
     }
 }

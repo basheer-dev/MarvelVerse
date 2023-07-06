@@ -22,7 +22,7 @@ struct Comic: Codable {
     let modified: String?
     let pageCount: Int?
     let format: String?
-    let thumbnail: APIImage?
+    var thumbnail: APIImage?
     let images: [APIImage]?
     let dates: [APIDate]?
 }

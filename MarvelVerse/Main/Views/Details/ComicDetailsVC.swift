@@ -26,6 +26,7 @@ class ComicDetailsVC: UIViewController {
         label.textColor = .systemRed
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.numberOfLines = 0
         
         return label
     }()
@@ -100,7 +101,7 @@ class ComicDetailsVC: UIViewController {
     
     lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
     
-    lazy var descriptionLabel: UILabel = getSubTitleLabel(size: 14)
+    lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
     let testButton: UIButton = {
         let button = UIButton()
@@ -125,14 +126,14 @@ class ComicDetailsVC: UIViewController {
         return label
     }
     
-    private func getSubTitleLabel(size: CGFloat = 12) -> UILabel {
+    private func getSubTitleLabel() -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.numberOfLines = 0
         label.textColor = .systemGray
         label.textAlignment = .justified
-        label.font = .systemFont(ofSize: size, weight: .bold)
+        label.font = .systemFont(ofSize: 12, weight: .bold)
         
         return label
     }

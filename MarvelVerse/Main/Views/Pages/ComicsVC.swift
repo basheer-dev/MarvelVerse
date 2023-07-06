@@ -29,7 +29,7 @@ final class ComicsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        let urlString = "https://gateway.marvel.com:443/v1/public/comics?limit=20&format=comic&formatType=comic&hasDigitalIssue=false&orderBy=title&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
+        let urlString = "https://gateway.marvel.com:443/v1/public/comics?hasDigitalIssue=false&orderBy=title&limit=20&ts=1&apikey=96cfa48ca9c0a2e2273c897356ba5f37&hash=18ee522a7cc80757a01ca3bb79608f05"
         
         fetchData(from: urlString)
     }
@@ -40,7 +40,7 @@ final class ComicsVC: UIViewController {
     }
     
     // MARK: - DATA
-    private func fetchData(from urlString: String, offset: Int = 3) {
+    private func fetchData(from urlString: String, offset: Int = 0) {
         let urlString = urlString + "&offset=\(offset)"
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -63,12 +63,14 @@ final class ComicsVC: UIViewController {
                 [weak self] in
                 guard let strongSelf = self else { return }
                 for comic in parsedComics {
-                    self?.comics.append(comic)
-                    self?.tableView.insertRows(at: [IndexPath(row: strongSelf.comics.count - 1, section: 0)], with: .automatic)
+                    if strongSelf.comics.contains(where: { $0.id == comic.id }) == false {
+                        self?.comics.append(comic)
+                        self?.tableView.insertRows(at: [IndexPath(row: strongSelf.comics.count - 1, section: 0)], with: .automatic)
+                    } else {
+                        print("found a repetitive item")
+                    }
                 }
             }
-        } else {
-            print("couldn't parse json")
         }
     }
 }

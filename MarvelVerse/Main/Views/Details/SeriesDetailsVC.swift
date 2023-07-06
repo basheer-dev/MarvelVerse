@@ -87,7 +87,7 @@ class SeriesDetailsVC: UIViewController {
     private lazy var secondSeparator: UIView = getSeparator()
     
     private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
-    private lazy var descriptionLabel: UILabel = getSubTitleLabel(size: 14)
+    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
@@ -101,14 +101,14 @@ class SeriesDetailsVC: UIViewController {
         return label
     }
     
-    private func getSubTitleLabel(size: CGFloat = 12) -> UILabel {
+    private func getSubTitleLabel() -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.numberOfLines = 0
         label.textColor = .systemGray
         label.textAlignment = .justified
-        label.font = .systemFont(ofSize: size, weight: .bold)
+        label.font = .systemFont(ofSize: 12, weight: .bold)
         
         return label
     }

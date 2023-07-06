@@ -72,12 +72,12 @@ class SeriesCell: UITableViewCell {
     }
     
     func set(series: Series) {
-        titleLabel.text = URLManager.shared.getTitle(from: series.title)
-        descriptionLabel.text = URLManager.shared.getDescription(description: series.description)
-        ratingLabel.text = "Rating | \(URLManager.shared.getAPIStringInfo(from: series.rating))"
+        titleLabel.text = ModelTextManager.shared.getTitle(from: series.title)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
+        ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
         
         /// Getting the series image
-        URLManager.shared.getAPIImageData(image: series.thumbnail) {
+        ModelImageManager.shared.getImageData(for: series.thumbnail) {
             [weak self] data in
             DispatchQueue.main.async {
                 self?.seriesImageView.image = UIImage(data: data)

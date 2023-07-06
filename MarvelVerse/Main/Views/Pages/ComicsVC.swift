@@ -52,7 +52,7 @@ final class ComicsVC: UIViewController {
     // MARK: - DATA
     private func fetchData(title: String = "", offset: Int = 0) {
         var urlString = "https://gateway.marvel.com:443/v1/public/comics"
-        urlString += URLManager.shared.getAPIUserKey()
+        urlString += URLManager.shared.getAPIUserKeyInfo()
         
         if offset > 0 {
             urlString += "&offset=\(offset)&limit=20"
@@ -128,7 +128,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         if thumbnails[comics[indexPath.row].id] != nil {
             cell.thumbNailImageView.image = UIImage(data: thumbnails[comics[indexPath.row].id]!)
         } else {
-            URLManager.shared.getAPIImageData(image: comics[indexPath.row].thumbnail) {
+            ModelImageManager.shared.getImageData(for: comics[indexPath.row].thumbnail) {
                 [weak self] data in
                 guard let strongSelf = self else { return }
                 DispatchQueue.main.async {

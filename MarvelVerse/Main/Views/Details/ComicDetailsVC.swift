@@ -166,12 +166,12 @@ class ComicDetailsVC: UIViewController {
     }
     
     func set(comic: Comic) {
-        titleLabel.text = URLManager.shared.getTitle(from: comic.title)
+        titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
         formatLabel.text = "Format | \(comic.format ?? "Not specified")"
         pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
-        dateLabel.text = URLManager.shared.getPubDate(from: comic.dates)
-        modificationDate.text = URLManager.shared.getDate(from: comic.modified)
-        descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
+        dateLabel.text = ModelDateManager.shared.getPubDate(from: comic.dates)
+        modificationDate.text = ModelDateManager.shared.getDate(from: comic.modified)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
         
         /// Getting the comic's thumbnail and related images
         if let thumbnail = comic.thumbnail {

@@ -79,12 +79,12 @@ final class ComicCell: UITableViewCell {
     }
     
     func set(comic: Comic) {
-        titleLabel.text = URLManager.shared.getTitle(from: comic.title)
+        titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
         pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
         thumbNailImageView.image = .none
         
         /// Handling the description
-        descriptionLabel.text = URLManager.shared.getDescription(description: comic.description)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
         
         /// Getting the thumbnail image
 //        URLManager.shared.getAPIImageData(image: comic.thumbnail) {

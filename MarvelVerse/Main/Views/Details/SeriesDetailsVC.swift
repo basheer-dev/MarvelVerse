@@ -153,16 +153,16 @@ class SeriesDetailsVC: UIViewController {
     }
     
     func set(series: Series) {
-        titleLabel.text = URLManager.shared.getTitle(from: series.title)
-        typeLabel.text = "Type | \(URLManager.shared.getAPIStringInfo(from: series.type))"
-        ratingLabel.text = "Rating | \(URLManager.shared.getAPIStringInfo(from: series.rating))"
-        startYearLabel.text = URLManager.shared.getYear(from: series.startYear)
-        endYearLabel.text = URLManager.shared.getYear(from: series.endYear)
-        modificationDateLabel.text = URLManager.shared.getDate(from: series.modified)
-        descriptionLabel.text = URLManager.shared.getDescription(description: series.description)
+        titleLabel.text = ModelTextManager.shared.getTitle(from: series.title)
+        typeLabel.text = "Type | \(ModelTextManager.shared.getStringInfo(from: series.type))"
+        ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
+        startYearLabel.text = ModelDateManager.shared.getYear(from: series.startYear)
+        endYearLabel.text = ModelDateManager.shared.getYear(from: series.endYear)
+        modificationDateLabel.text = ModelDateManager.shared.getDate(from: series.modified)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
         
         ///Getting the series image
-        URLManager.shared.getAPIImageData(image: series.thumbnail) {
+        ModelImageManager.shared.getImageData(for: series.thumbnail) {
             [weak self] data in
             DispatchQueue.main.async {
                 self?.seriesImageView.image = UIImage(data: data)

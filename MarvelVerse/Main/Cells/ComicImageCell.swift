@@ -35,7 +35,7 @@ class ComicImageCell: UICollectionViewCell {
     }
     
     func set(image: APIImage) {
-        URLManager.shared.getAPIImageData(image: image) {
+        ModelImageManager.shared.getImageData(for: image) {
             [weak self] data in
             DispatchQueue.main.async {
                 let image = UIImage(data: data)

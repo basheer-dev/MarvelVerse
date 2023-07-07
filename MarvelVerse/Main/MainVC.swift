@@ -143,12 +143,15 @@ final class MainVC: UIViewController {
 
 // MARK: - SEARCH BAR EXT
 extension MainVC: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text else { return }
         delegate?.didSearchFor(title: searchText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.placeholder = searchBar.text?.trimmingCharacters(in: .whitespaces).isEmpty == true ? "Search" : searchBar.text
+        searchBar.placeholder = "Search"
+        delegate?.didSearchFor(title: "")
     }
 }
 

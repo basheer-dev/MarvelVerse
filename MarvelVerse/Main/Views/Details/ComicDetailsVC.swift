@@ -103,17 +103,6 @@ final class ComicDetailsVC: UIViewController {
     
     private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
-    private let testButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.configuration = .tinted()
-        button.configuration?.title = "Marvel"
-        button.configuration?.baseBackgroundColor = .systemRed
-        button.configuration?.baseForegroundColor = .systemRed
-        
-        return button
-    }()
-    
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -158,7 +147,6 @@ final class ComicDetailsVC: UIViewController {
         scrollView.addSubview(datesSeparator)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
-        scrollView.addSubview(testButton)
         
         view.addSubview(scrollView)
         
@@ -240,12 +228,7 @@ final class ComicDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            
-            testButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 1000),
-            testButton.widthAnchor.constraint(equalToConstant: 150),
-            testButton.heightAnchor.constraint(equalToConstant: 44),
-            testButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            testButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10)
+            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
         ])
     }
 }

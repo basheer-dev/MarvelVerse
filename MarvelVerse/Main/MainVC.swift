@@ -99,7 +99,7 @@ final class MainVC: UIViewController {
         pageContentView = comicsVC.view
         title = "Comics"
         
-        sideMenu.frame = CGRect(x: -(view.frame.width - 100), y: 0, width: view.frame.width - 100, height: view.frame.height)
+        sideMenu.frame = CGRect(x: -(view.frame.width - 100), y: view.frame.origin.y, width: view.frame.width - 100, height: view.frame.height)
         menuTable.frame = sideMenu.bounds
         sideMenu.addSubview(menuTable)
         view.addSubview(sideMenu)
@@ -126,10 +126,12 @@ final class MainVC: UIViewController {
     private func showHideSideMenu() {
         UIView.animate(withDuration: 0.2) {
             if self.isSideMenuActive == true {
+                self.view.subviews.first?.isUserInteractionEnabled = false
                 self.sideMenu.frame.origin.x = 0
                 self.navigationController?.navigationBar.transform = CGAffineTransform(translationX: self.view.frame.width - 100, y: 0)
                 self.pageContentView?.frame.origin.x = self.view.frame.width - 100
             } else {
+                self.view.subviews.first?.isUserInteractionEnabled = true
                 self.sideMenu.frame.origin.x = -(self.view.frame.width - 100)
                 self.navigationController?.navigationBar.transform = .identity
                 self.pageContentView?.frame.origin.x = 0
@@ -168,7 +170,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         var cellInfo = cell.defaultContentConfiguration()
         
         cellInfo.text = Pages.allCases[indexPath.row].rawValue
-        cellInfo.textProperties.color = .systemBackground
+        cellInfo.textProperties.color = .label
         cellInfo.textProperties.font = .systemFont(ofSize: 15, weight: .bold)
         
         cell.contentConfiguration = cellInfo

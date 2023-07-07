@@ -69,9 +69,10 @@ final class CharacterDetailsVC: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+//        imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 125
-        imageView.layer.borderColor = CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)
-        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = CGColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        imageView.layer.borderWidth = 5
         imageView.clipsToBounds = true
         
         return imageView
@@ -120,6 +121,9 @@ final class CharacterDetailsVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
+//        thumbnailImageView.addGestureRecognizer(tapGesture)
+        
         scrollView.addSubview(thumbnailImageView)
         scrollView.addSubview(nameLabel)
         scrollView.addSubview(idLabel)
@@ -172,6 +176,17 @@ final class CharacterDetailsVC: UIViewController {
     @objc private func didTapSave() {
         
     }
+    
+//    @objc private func didTapImage() {
+//        let dest = ImageViewerVC()
+//        dest.imageView.image = thumbnailImageView.image
+//
+//        dest.modalPresentationStyle = .pageSheet
+//        dest.sheetPresentationController?.detents = [.medium()]
+//        dest.sheetPresentationController?.prefersGrabberVisible = true
+//
+//        present(dest, animated: true)
+//    }
     
     // MARK: - LAYOUTS CONFIG
     private func configureLayouts() {

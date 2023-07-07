@@ -14,7 +14,6 @@ final class ComicCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        imageView.isUserInteractionEnabled = true
         imageView.layer.borderColor = UIColor(cgColor: CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)).cgColor
         imageView.layer.borderWidth = 1
         
@@ -106,9 +105,9 @@ final class ComicCell: UITableViewCell {
     
     // MARK: - SUBVIEWS
     private func configureSubviews() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
-        thumbNailImageView.isUserInteractionEnabled = true
-        thumbNailImageView.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
+//        thumbNailImageView.isUserInteractionEnabled = true
+//        thumbNailImageView.addGestureRecognizer(tapGesture)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         addSubview(thumbNailImageView)

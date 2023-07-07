@@ -8,10 +8,155 @@
 import UIKit
 
 final class CharactersVC: UIViewController {
+    
+    private var characters: [Character] = []
+    private var thumbnails: [Int: Data] = [:]
+    private var searchTitle: String = ""
+    private var globalOffset: Int = 0
+    
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+        
+        let layout = UICollectionViewFlowLayout()
+//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.itemSize = CGSize(width: view.frame.width/2 - 20, height: 200)
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 10
+        
+        collectionView.setCollectionViewLayout(layout, animated: true)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: CharacterCell.id)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        collectionView.showsVerticalScrollIndicator = false
+        
+        return collectionView
+    }()
 
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        fetchData(title: searchTitle)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        collectionView.frame = view.bounds
+        view.addSubview(collectionView)
+    }
+    
+    // MARK: - DATA
+    private func fetchData(title: String = "", offset: Int = 0) {
+        var urlString = "https://gateway.marvel.com:443/v1/public/characters"
+        urlString += URLManager.shared.getAPIUserKeyInfo()
+        
+        if offset > 0 {
+            urlString += "&offset=\(offset)&limit=20"
+        }
+        
+        if !title.trimmingCharacters(in: .whitespaces).isEmpty {
+            urlString += "&orderBy=name&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+        }
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            [weak self] in
+            
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parseJSON(json: data)
+                }
+            }
+        }
+    }
+    
+    private func parseJSON(json: Data) {
+        let decoder = JSONDecoder()
+        
+        if let APIData = try? decoder.decode(Characters.self, from: json) {
+            let APICharacters = APIData.data.results
+            
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let self = self else { return }
+                
+                for character in APICharacters {
+                    if self.characters.contains(where: { $0.id == character.id }) == false && character.thumbnail?.path?.contains("/image_not_available") == false {
+                        self.characters.append(character)
+                        self.collectionView.insertItems(at: [IndexPath(item: self.characters.count - 1, section: 0)])
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: - SEARCHAPI EXT
+extension CharactersVC: APIDataSearch {
+    func didSearchFor(title: String) {
+        clearData()
+        searchTitle = title
+        fetchData(title: searchTitle)
+    }
+    
+    private func clearData() {
+        thumbnails.removeAll()
+        characters.removeAll()
+        collectionView.reloadData()
+    }
+}
+
+
+// MARK: - COLLECTION VIEW EXT
+extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return characters.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCell.id, for: indexPath) as? CharacterCell else { fatalError() }
+        cell.set(character: characters[indexPath.item])
+        
+        cell.backgroundColor = .secondarySystemBackground
+//        cell.layer.borderColor = CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.15)
+//        cell.layer.borderWidth = 1
+        cell.layer.cornerRadius = 15
+        
+        /// Getting the thumbnail image
+        cell.characterImageView.image = .none
+        
+        if thumbnails[characters[indexPath.item].id] != nil {
+            cell.characterImageView.image = UIImage(data: thumbnails[characters[indexPath.item].id]!)
+        } else {
+            ModelImageManager.shared.getImageData(for: characters[indexPath.item].thumbnail) {
+                [weak self] data in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    cell.characterImageView.image = UIImage(data: data)
+                    
+                    if self.characters.count > indexPath.item {
+                        self.thumbnails[self.characters[indexPath.item].id] = data
+                    }
+                }
+            }
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.item == characters.count - 1 {
+            if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
+                globalOffset += characters.count
+                fetchData(offset: globalOffset)
+            } else {
+                fetchData(title: searchTitle, offset: characters.count)
+            }
+        }
     }
 }

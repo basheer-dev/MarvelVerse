@@ -24,6 +24,8 @@
 		3A6FA4112A4F1C2C001C104E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6FA4102A4F1C2C001C104E /* SceneDelegate.swift */; };
 		3A6FA4182A4F1C2E001C104E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A6FA4172A4F1C2E001C104E /* Assets.xcassets */; };
 		3A6FA41B2A4F1C2E001C104E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A6FA4192A4F1C2E001C104E /* LaunchScreen.storyboard */; };
+		3AB85B952A57D3850099471B /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB85B942A57D3850099471B /* Character.swift */; };
+		3AB85B972A57D5980099471B /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB85B962A57D5970099471B /* CharacterCell.swift */; };
 		3AC40C912A52D6BF001A97EB /* Comics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40C902A52D6BF001A97EB /* Comics.swift */; };
 		3AC40C952A53219C001A97EB /* ComicDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40C942A53219C001A97EB /* ComicDetailsVC.swift */; };
 		3AC40C972A533A47001A97EB /* ComicImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40C962A533A47001A97EB /* ComicImageCell.swift */; };
@@ -51,6 +53,8 @@
 		3A6FA4172A4F1C2E001C104E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A6FA41A2A4F1C2E001C104E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3A6FA41C2A4F1C2E001C104E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3AB85B942A57D3850099471B /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		3AB85B962A57D5970099471B /* CharacterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCell.swift; sourceTree = "<group>"; };
 		3AC40C902A52D6BF001A97EB /* Comics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comics.swift; sourceTree = "<group>"; };
 		3AC40C942A53219C001A97EB /* ComicDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailsVC.swift; sourceTree = "<group>"; };
 		3AC40C962A533A47001A97EB /* ComicImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicImageCell.swift; sourceTree = "<group>"; };
@@ -84,6 +88,7 @@
 				3A0D7CA82A51D4260061E3A5 /* ComicCell.swift */,
 				3AC40C962A533A47001A97EB /* ComicImageCell.swift */,
 				3A416F812A553A5100C09C00 /* SeriesCell.swift */,
+				3AB85B962A57D5970099471B /* CharacterCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 				3AC40C902A52D6BF001A97EB /* Comics.swift */,
 				3A416F7D2A55308200C09C00 /* Series.swift */,
 				3A416F7F2A5531B600C09C00 /* CommonAPIData.swift */,
+				3AB85B942A57D3850099471B /* Character.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -260,12 +266,14 @@
 				3A0D7CA22A5151600061E3A5 /* CharactersVC.swift in Sources */,
 				3A3A1EBC2A572CC000B1441F /* ModelTextManager.swift in Sources */,
 				3A0D7CA42A51B5FF0061E3A5 /* SeriesVC.swift in Sources */,
+				3AB85B972A57D5980099471B /* CharacterCell.swift in Sources */,
 				3A3A1EBE2A572D5800B1441F /* ModelDateManager.swift in Sources */,
 				3A6FA40F2A4F1C2C001C104E /* AppDelegate.swift in Sources */,
 				3A416F842A55881100C09C00 /* SeriesDetailsVC.swift in Sources */,
 				3A3A1EBA2A570C1000B1441F /* ComicsVC.swift in Sources */,
 				3AF057D82A53D8CC009C506B /* URLManager.swift in Sources */,
 				3A0D7CA92A51D4260061E3A5 /* ComicCell.swift in Sources */,
+				3AB85B952A57D3850099471B /* Character.swift in Sources */,
 				3A08C7362A501D800085131B /* MainVC.swift in Sources */,
 				3A416F822A553A5100C09C00 /* SeriesCell.swift in Sources */,
 				3A416F7E2A55308200C09C00 /* Series.swift in Sources */,
@@ -420,8 +428,9 @@
 				INFOPLIST_FILE = MarvelVerse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -429,9 +438,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = BasheerAbdulmalik.MarvelVerse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -447,8 +459,9 @@
 				INFOPLIST_FILE = MarvelVerse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -456,9 +469,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = BasheerAbdulmalik.MarvelVerse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

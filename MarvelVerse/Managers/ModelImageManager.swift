@@ -11,8 +11,10 @@ class ModelImageManager {
     
     static let shared = ModelImageManager()
     
+    
     func getImageData(for image: APIImage?, completionBlock: @escaping (Data) -> Void) {
         guard let image = image else { return }
+        
         if let imagePath = image.path {
             if let imageExtension = image.extension {
                 let imageURLString = imagePath.replacingOccurrences(of: "http://", with: "https://") + "." + imageExtension
@@ -22,7 +24,9 @@ class ModelImageManager {
                         data, _, error in
                         guard error == nil,
                               let data = data else { return }
+                        
                         completionBlock(data)
+                        
                     }.resume()
                 }
             }

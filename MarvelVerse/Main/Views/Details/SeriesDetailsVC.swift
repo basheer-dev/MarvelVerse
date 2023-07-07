@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SeriesDetailsVC: UIViewController {
+final class SeriesDetailsVC: UIViewController {
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()

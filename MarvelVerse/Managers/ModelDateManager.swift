@@ -12,11 +12,13 @@ class ModelDateManager {
     static let shared = ModelDateManager()
     let dateFormatter = ISO8601DateFormatter()
     
+    
     func getYear(from year: Int?) -> String {
         guard let year = year else { return "Not Defined"}
         
         return String(year)
     }
+    
     
     func getDate(from dateString: String?) -> String {
         if let dateString = dateString {
@@ -32,6 +34,7 @@ class ModelDateManager {
         return "Date Not Defined"
     }
     
+    
     func getPubDate(from dates: [APIDate]?) -> String {
         // Used with comics only
         
@@ -41,7 +44,6 @@ class ModelDateManager {
             if date.type == "onsaleDate" {
                 if let dateString = date.date {
                     if let pubDate = dateFormatter.date(from: dateString) {
-                        
                         let year = Calendar.current.component(.year, from: pubDate)
                         let month = Calendar.current.component(.month, from: pubDate)
                         let day = Calendar.current.component(.day, from: pubDate)

@@ -7,10 +7,10 @@
 
 import UIKit
 
-class ComicDetailsVC: UIViewController {
-    var comicImages: [APIImage] = []
+final class ComicDetailsVC: UIViewController {
+    private var comicImages: [APIImage] = []
     
-    let scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
         
@@ -19,7 +19,7 @@ class ComicDetailsVC: UIViewController {
         return scroll
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -31,7 +31,7 @@ class ComicDetailsVC: UIViewController {
         return label
     }()
     
-    let formatLabel: UILabel = {
+    private let formatLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -42,7 +42,7 @@ class ComicDetailsVC: UIViewController {
         return label
     }()
     
-    let saveButton: UIButton = {
+    private let saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -53,7 +53,7 @@ class ComicDetailsVC: UIViewController {
         return button
     }()
     
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -72,7 +72,7 @@ class ComicDetailsVC: UIViewController {
         return collectionView
     }()
     
-    let pagesCountLabel: UILabel = {
+    private let pagesCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -83,13 +83,13 @@ class ComicDetailsVC: UIViewController {
         return label
     }()
     
-    lazy var dateTitleLabel: UILabel = getTitleLabel(title: "Published")
-    lazy var modificationDateTitle: UILabel = getTitleLabel(title: "Modified")
+    private lazy var dateTitleLabel: UILabel = getTitleLabel(title: "Published")
+    private lazy var modificationDateTitle: UILabel = getTitleLabel(title: "Modified")
     
-    lazy var dateLabel: UILabel = getSubTitleLabel()
-    lazy var modificationDate: UILabel = getSubTitleLabel()
+    private lazy var dateLabel: UILabel = getSubTitleLabel()
+    private lazy var modificationDate: UILabel = getSubTitleLabel()
     
-    let datesSeparator: UIView = {
+    private let datesSeparator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -99,11 +99,11 @@ class ComicDetailsVC: UIViewController {
         return view
     }()
     
-    lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
+    private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
     
-    lazy var descriptionLabel: UILabel = getSubTitleLabel()
+    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
-    let testButton: UIButton = {
+    private let testButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.configuration = .tinted()

@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol DidSearch {
-    func didSearchForComic(title: String)
+protocol APIDataSearch {
+    func didSearchFor(title: String)
 }
 
 final class MainVC: UIViewController {
-    var delegate: DidSearch?
+    var delegate: APIDataSearch?
     
     private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
@@ -144,7 +144,7 @@ final class MainVC: UIViewController {
 // MARK: - SEARCH BAR EXT
 extension MainVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        delegate?.didSearchForComic(title: searchText)
+        delegate?.didSearchFor(title: searchText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -202,6 +202,9 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             dest = ComicsVC()
         }
         
+        delegate = dest as? any APIDataSearch
+        searchController.searchBar.text = ""
+        searchController.searchBar.placeholder = "Search"
         addChild(dest)
         view.insertSubview(dest.view, at: 0)
         pageContentView = dest.view

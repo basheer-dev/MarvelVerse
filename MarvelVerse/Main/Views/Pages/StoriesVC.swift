@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StoriesVC: UIViewController {
+final class StoriesVC: UIViewController {
 
     // MARK: - VDL
     override func viewDidLoad() {

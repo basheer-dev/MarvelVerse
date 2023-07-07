@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CharactersVC: UIViewController {
+final class CharactersVC: UIViewController {
 
     // MARK: - VDL
     override func viewDidLoad() {

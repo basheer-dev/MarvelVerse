@@ -7,14 +7,13 @@
 
 import UIKit
 
-class SeriesCell: UITableViewCell {
+final class SeriesCell: UITableViewCell {
     static let id = "SeriesContainer"
     
-    private let seriesImageView: UIImageView = {
+    let seriesImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        view.backgroundColor = .systemMint
         return view
     }()
     

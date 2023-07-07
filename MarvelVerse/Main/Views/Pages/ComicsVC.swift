@@ -9,10 +9,11 @@ import UIKit
 
 
 final class ComicsVC: UIViewController {
+    
     private var comics: [Comic] = []
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
-    private var globalOffset = 0
+    private var globalOffset: Int = 0
         
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -64,6 +65,7 @@ final class ComicsVC: UIViewController {
         
         DispatchQueue.global(qos: .userInteractive).async {
             [weak self] in
+            
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     // Ok to parse
@@ -82,6 +84,7 @@ final class ComicsVC: UIViewController {
             DispatchQueue.main.async {
                 [weak self] in
                 guard let self = self else { return }
+                
                 for comic in APIComics {
                     if self.comics.contains(where: { $0.id == comic.id }) == false && comic.thumbnail?.path?.contains("/image_not_available") == false {
                         self.comics.append(comic)
@@ -94,10 +97,10 @@ final class ComicsVC: UIViewController {
 }
 
 
-// MARK: DIDSEARCH EXT
-extension ComicsVC: DidSearch {
+// MARK: APISEARCH EXT
+extension ComicsVC: APIDataSearch {
     
-    func didSearchForComic(title: String) {
+    func didSearchFor(title: String) {
         clearData()
         searchTitle = title
         fetchData(title: searchTitle)
@@ -131,6 +134,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
             ModelImageManager.shared.getImageData(for: comics[indexPath.row].thumbnail) {
                 [weak self] data in
                 guard let strongSelf = self else { return }
+                
                 DispatchQueue.main.async {
                     cell.thumbNailImageView.image = UIImage(data: data)
                     
@@ -155,7 +159,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == comics.count - 1 {
             /// The user has reached the bottom
             /// Get more data
-            ///
+
             if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
                 globalOffset += comics.count
                 fetchData(offset: globalOffset)

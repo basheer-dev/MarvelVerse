@@ -13,6 +13,7 @@ final class CharactersVC: UIViewController {
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
+    private var touchPosition: CGPoint = .zero
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
@@ -147,6 +148,13 @@ extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let dest = CharacterDetailsVC()
+        dest.set(character: characters[indexPath.row])
+        
+        navigationController?.pushViewController(dest, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

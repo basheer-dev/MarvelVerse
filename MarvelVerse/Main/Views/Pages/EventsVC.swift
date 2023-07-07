@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StoriesVC: UIViewController {
+final class EventsVC: UIViewController {
 
     // MARK: - VDL
     override func viewDidLoad() {

@@ -200,7 +200,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         case Pages.characters.rawValue:
             dest = CharactersVC()
         case Pages.stories.rawValue:
-            dest = StoriesVC()
+            dest = EventsVC()
         default:
             dest = ComicsVC()
         }

@@ -204,17 +204,17 @@ final class SeriesDetailsVC: UIViewController {
             startYearLabel.topAnchor.constraint(equalTo: startYearTitleLabel.bottomAnchor, constant: 5),
             startYearLabel.leadingAnchor.constraint(equalTo: startYearTitleLabel.leadingAnchor),
             
-            endYearTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            endYearTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
-            
-            endYearLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
-            endYearLabel.centerXAnchor.constraint(equalTo: endYearTitleLabel.centerXAnchor),
-            
+            modificationTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             modificationTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
-            modificationTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             
             modificationDateLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
-            modificationDateLabel.trailingAnchor.constraint(equalTo: modificationTitleLabel.trailingAnchor),
+            modificationDateLabel.centerXAnchor.constraint(equalTo: modificationTitleLabel.centerXAnchor),
+            
+            endYearTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
+            endYearTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            
+            endYearLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
+            endYearLabel.trailingAnchor.constraint(equalTo: endYearTitleLabel.trailingAnchor),
             
             firstSeparator.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
             firstSeparator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -view.frame.width/4 + 25),
@@ -233,7 +233,7 @@ final class SeriesDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -100)
+            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
         ])
     }
 }

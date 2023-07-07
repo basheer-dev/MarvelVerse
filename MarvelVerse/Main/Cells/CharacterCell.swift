@@ -15,7 +15,7 @@ final class CharacterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.layer.borderColor = UIColor(cgColor: CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)).cgColor
+        imageView.layer.borderColor = UIColor(cgColor: CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1)).cgColor
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true

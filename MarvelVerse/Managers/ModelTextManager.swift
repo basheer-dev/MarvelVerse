@@ -41,4 +41,21 @@ class ModelTextManager {
         
         return "Not Defined"
     }
+    
+    func getPrice(from prices: [APIPrice]?, isPrintPrice: Bool = false, isDigitalCopyPrice: Bool = false) -> String {
+        guard let prices = prices else { return "N/A"}
+        
+        for price in prices {
+            guard let priceType = price.type,
+                  let priceValue = price.price else { return "N/A"}
+            
+            if isPrintPrice && priceType == "printPrice" {
+                return "$ \(priceValue)"
+            } else if isDigitalCopyPrice && priceType == "digitalPurchasePrice" {
+                return "$ \(priceValue)"
+            }
+        }
+        
+        return "N/A"
+    }
 }

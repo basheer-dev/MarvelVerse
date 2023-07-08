@@ -25,4 +25,5 @@ struct Comic: Codable {
     var thumbnail: APIImage?
     let images: [APIImage]?
     let dates: [APIDate]?
+    let prices: [APIPrice]?
 }

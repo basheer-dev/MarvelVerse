@@ -25,3 +25,8 @@ struct APIObject: Codable {
     let resourceURI: String?
     let name: String?
 }
+
+struct APIPrice: Codable {
+    let type: String?
+    let price: Float?
+}

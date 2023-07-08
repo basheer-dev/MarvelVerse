@@ -103,6 +103,12 @@ final class ComicDetailsVC: UIViewController {
     
     private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
+    private lazy var pricesTitleLabel: UILabel = getTitleLabel(title: "Prices")
+    private lazy var printPriceTitleLabel: UILabel = getSubTitleLabel(title: "Print Price")
+    private lazy var digitalCopyPriceTitleLabel: UILabel = getSubTitleLabel(title: "Digital Copy")
+    private lazy var printPriceLabel: UILabel = getPriceLabel()
+    private lazy var digitalCopyPriceLabel: UILabel = getPriceLabel()
+    
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -115,13 +121,29 @@ final class ComicDetailsVC: UIViewController {
         return label
     }
     
-    private func getSubTitleLabel() -> UILabel {
+    private func getSubTitleLabel(title: String = "") -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.numberOfLines = 0
         label.textColor = .systemGray
         label.textAlignment = .justified
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        
+        if !title.isEmpty {
+            label.text = title
+        }
+        
+        return label
+    }
+    
+    private func getPriceLabel() -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.numberOfLines = 1
+        label.textColor = .systemGreen
+        label.textAlignment = .left
         label.font = .systemFont(ofSize: 12, weight: .bold)
         
         return label
@@ -147,6 +169,11 @@ final class ComicDetailsVC: UIViewController {
         scrollView.addSubview(datesSeparator)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
+        scrollView.addSubview(pricesTitleLabel)
+        scrollView.addSubview(printPriceTitleLabel)
+        scrollView.addSubview(printPriceLabel)
+        scrollView.addSubview(digitalCopyPriceTitleLabel)
+        scrollView.addSubview(digitalCopyPriceLabel)
         
         view.addSubview(scrollView)
         
@@ -160,6 +187,8 @@ final class ComicDetailsVC: UIViewController {
         dateLabel.text = ModelDateManager.shared.getPubDate(from: comic.dates)
         modificationDate.text = ModelDateManager.shared.getDate(from: comic.modified)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
+        printPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isPrintPrice: true)
+        digitalCopyPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isDigitalCopyPrice: true)
         
         /// Getting the comic's thumbnail and related images
         if let thumbnail = comic.thumbnail {
@@ -221,14 +250,27 @@ final class ComicDetailsVC: UIViewController {
             datesSeparator.widthAnchor.constraint(equalToConstant: 2),
             datesSeparator.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
-            descriptionTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),
+            pricesTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),
+            pricesTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            
+            printPriceTitleLabel.topAnchor.constraint(equalTo: pricesTitleLabel.bottomAnchor, constant: 5),
+            printPriceTitleLabel.leadingAnchor.constraint(equalTo: pricesTitleLabel.leadingAnchor),
+            printPriceLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.topAnchor),
+            printPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceLabel.leadingAnchor),
+            
+            digitalCopyPriceTitleLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.bottomAnchor, constant: 5),
+            digitalCopyPriceTitleLabel.leadingAnchor.constraint(equalTo: pricesTitleLabel.leadingAnchor),
+            digitalCopyPriceLabel.topAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.topAnchor),
+            digitalCopyPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.trailingAnchor, constant: 10),
+            
+            descriptionTitleLabel.topAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.bottomAnchor, constant: 50),
             descriptionTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
+            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50),
         ])
     }
 }

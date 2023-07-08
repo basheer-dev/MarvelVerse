@@ -69,7 +69,6 @@ final class CharacterDetailsVC: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-//        imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 125
         imageView.layer.borderColor = CGColor(red: 1, green: 0, blue: 0, alpha: 0.5)
         imageView.layer.borderWidth = 5
@@ -81,8 +80,8 @@ final class CharacterDetailsVC: UIViewController {
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = title
         
+        label.text = title
         label.textColor = .label
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 18, weight: .bold)
@@ -156,14 +155,12 @@ final class CharacterDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(didTapSave))
     }
     
     override func viewDidLayoutSubviews() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
-//        thumbnailImageView.addGestureRecognizer(tapGesture)
-        
         scrollView.addSubview(thumbnailImageView)
         scrollView.addSubview(activityIndicator)
         scrollView.addSubview(nameLabel)
@@ -182,6 +179,7 @@ final class CharacterDetailsVC: UIViewController {
         scrollView.addSubview(comicsButton)
         
         view.addSubview(scrollView)
+        
         configureLayouts()
     }
     
@@ -236,17 +234,6 @@ final class CharacterDetailsVC: UIViewController {
     @objc private func didTapSave() {
         
     }
-    
-//    @objc private func didTapImage() {
-//        let dest = ImageViewerVC()
-//        dest.imageView.image = thumbnailImageView.image
-//
-//        dest.modalPresentationStyle = .pageSheet
-//        dest.sheetPresentationController?.detents = [.medium()]
-//        dest.sheetPresentationController?.prefersGrabberVisible = true
-//
-//        present(dest, animated: true)
-//    }
     
     // MARK: - LAYOUTS CONFIG
     private func configureLayouts() {
@@ -305,7 +292,6 @@ final class CharacterDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
             
             detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
             detailsButton.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 15),

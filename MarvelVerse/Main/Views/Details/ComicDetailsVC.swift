@@ -58,8 +58,10 @@ final class ComicDetailsVC: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         let layout = UICollectionViewFlowLayout()
+        
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 15
+        
         collectionView.setCollectionViewLayout(layout, animated: true)
         
         collectionView.delegate = self
@@ -100,7 +102,6 @@ final class ComicDetailsVC: UIViewController {
     }()
     
     private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
-    
     private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
     private lazy var pricesTitleLabel: UILabel = getTitleLabel(title: "Prices")
@@ -112,8 +113,8 @@ final class ComicDetailsVC: UIViewController {
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = title
         
+        label.text = title
         label.textColor = .label
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 18, weight: .bold)
@@ -182,6 +183,7 @@ final class ComicDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         navigationItem.largeTitleDisplayMode = .never
     }
     
@@ -326,7 +328,6 @@ final class ComicDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -75),
             
             detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
             detailsButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 15),

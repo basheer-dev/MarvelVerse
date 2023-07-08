@@ -17,7 +17,6 @@ final class MainVC: UIViewController {
     private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
     private var isSideMenuActive: Bool = false
-    var comicsThumbnails: [Int: Data] = [:]
     
     enum Pages: String, CaseIterable {
         case comics = "Comics"
@@ -29,7 +28,6 @@ final class MainVC: UIViewController {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
         searchController.searchBar.delegate = self
-        
         
         return searchController
     }()
@@ -54,24 +52,18 @@ final class MainVC: UIViewController {
         return tableView
     }()
     
-    let testButton: UIButton = {
-        let button = UIButton()
-        
-        button.configuration = .filled()
-        button.configuration?.title = "Bahseer"
-        return button
-    }()
-    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         navigationItem.searchController = searchController
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .systemRed
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(test))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet.indent"), style: .plain, target: self, action: #selector(toggleSideMenu))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(toggleSideMenu))
         
         handleSwipes()
         configureSubviews()
@@ -94,14 +86,18 @@ final class MainVC: UIViewController {
     private func configureSubviews() {
         let comicsVC = ComicsVC()
         delegate = comicsVC
+        
         addChild(comicsVC)
         view.addSubview(comicsVC.view)
+        
         pageContentView = comicsVC.view
         title = "Comics"
         
         sideMenu.frame = CGRect(x: -(view.frame.width - 100), y: view.frame.origin.y, width: view.frame.width - 100, height: view.frame.height)
         menuTable.frame = sideMenu.bounds
+        
         sideMenu.addSubview(menuTable)
+        
         view.addSubview(sideMenu)
     }
     
@@ -183,6 +179,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let dest = Pages.allCases[indexPath.row].rawValue
+        
         switchView(to: dest)
     }
     
@@ -209,12 +206,16 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         }
         
         delegate = dest as? any APIDataSearch
+        
         searchController.searchBar.text = ""
         searchController.searchBar.placeholder = "Search"
+        
         addChild(dest)
         view.insertSubview(dest.view, at: 0)
+        
         pageContentView = dest.view
         pageContentView?.frame.origin.x = view.frame.width - 100
+        
         isSideMenuActive = false
         showHideSideMenu()
         

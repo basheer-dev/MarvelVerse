@@ -22,6 +22,7 @@ class URLManager {
         return "?ts=\(ts)&apikey=\(publicKey)&hash=\(hash)"
     }
     
+    
     func MD5(of data: String) -> String {
         let hash = Insecure.MD5.hash(data: data.data(using: .utf8) ?? Data())
         
@@ -29,6 +30,7 @@ class URLManager {
             String(format: "%02hhx", $0)
         }.joined()
     }
+    
     
     func getURL(from urls: [APIUrl]?, isDetailsURL: Bool = false, isPurchaseURL: Bool = false, isComicsURL: Bool = false) -> String {
         guard let urls = urls else { return "" }

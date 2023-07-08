@@ -38,6 +38,7 @@ final class EventsVC: UIViewController {
     override func viewDidLayoutSubviews() {
         tableView.frame = view.bounds
         tableView.tableFooterView = createTableViewFooter()
+        
         view.addSubview(tableView)
     }
     
@@ -163,9 +164,6 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == events.count - 1 {
-            /// The user has reached the bottom
-            /// Get more data
-
             fetchData(title: searchTitle, offset: events.count + globalOffset)
         }
     }

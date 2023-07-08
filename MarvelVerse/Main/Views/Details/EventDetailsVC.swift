@@ -8,6 +8,7 @@
 import UIKit
 
 final class EventDetailsVC: UIViewController {
+    
     private var nextEvent: String = ""
     private var nextEventTitle: String = ""
     private var previousEvent: String = ""
@@ -87,8 +88,8 @@ final class EventDetailsVC: UIViewController {
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = title
         
+        label.text = title
         label.textColor = .label
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 18, weight: .bold)
@@ -134,7 +135,7 @@ final class EventDetailsVC: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.configuration = .tinted()
-        button.configuration?.cornerStyle = .medium
+        button.configuration?.cornerStyle = .capsule
         button.configuration?.title = "Details"
         button.configuration?.baseBackgroundColor = .systemCyan
         button.configuration?.baseForegroundColor = .systemCyan
@@ -148,6 +149,7 @@ final class EventDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         navigationItem.largeTitleDisplayMode = .never
     }
     
@@ -357,12 +359,11 @@ final class EventDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
             
             detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
-            detailsButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+            detailsButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25),
             detailsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            detailsButton.widthAnchor.constraint(equalToConstant: 150),
+            detailsButton.widthAnchor.constraint(equalToConstant: 200),
             detailsButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }

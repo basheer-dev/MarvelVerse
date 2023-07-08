@@ -52,8 +52,6 @@ final class ComicImageCell: UICollectionViewCell {
                 let image = UIImage(data: data)
                 self?.activityIndicator.stopAnimating()
                 self?.imageView.image = image
-//                print(image?.size)
-                // TODO: FIX LATER
             }
         }
     }

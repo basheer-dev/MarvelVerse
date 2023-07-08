@@ -39,6 +39,7 @@ final class ComicsVC: UIViewController {
     override func viewDidLayoutSubviews() {
         tableView.frame = view.bounds
         tableView.tableFooterView = createTableViewFooter()
+        
         view.addSubview(tableView)
     }
     

@@ -13,13 +13,12 @@ final class CharactersVC: UIViewController {
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
-    private var touchPosition: CGPoint = .zero
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
         
         let layout = UICollectionViewFlowLayout()
-//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        
         layout.itemSize = CGSize(width: view.frame.width/2 - 20, height: 200)
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
@@ -46,6 +45,7 @@ final class CharactersVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         collectionView.frame = view.bounds
+        
         view.addSubview(collectionView)
     }
     

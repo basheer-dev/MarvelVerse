@@ -8,6 +8,10 @@
 import UIKit
 
 final class EventDetailsVC: UIViewController {
+    private var nextEvent: String = ""
+    private var nextEventTitle: String = ""
+    private var previousEvent: String = ""
+    private var previousEventTitle: String = ""
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -29,30 +33,6 @@ final class EventDetailsVC: UIViewController {
         return label
     }()
     
-//    private let typeLabel: UILabel = {
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//
-//        label.textColor = .systemGray
-//        label.textAlignment = .left
-//        label.font = .systemFont(ofSize: 10, weight: .bold)
-//
-//        return label
-//    }()
-    
-    private lazy var startYearTitleLabel: UILabel = getTitleLabel(title: "Started")
-    private lazy var modificationTitleLabel: UILabel = getTitleLabel(title: "Modified")
-    private lazy var endYearTitleLabel: UILabel = getTitleLabel(title: "Ended")
-    private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
-    
-    private lazy var startYearLabel: UILabel = getSubTitleLabel()
-    private lazy var modificationDateLabel: UILabel = getSubTitleLabel()
-    private lazy var endYearLabel: UILabel = getSubTitleLabel()
-    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
-    
-    private lazy var firstSeparator: UIView = getSeparator()
-    private lazy var secondSeparator: UIView = getSeparator()
-    
     private let saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +53,33 @@ final class EventDetailsVC: UIViewController {
         view.layer.borderColor = CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)
         view.layer.borderWidth = 1
         view.clipsToBounds = true
+        
+        return view
+    }()
+    
+    private lazy var nextButton: UIButton = getButton()
+    private lazy var previousButton: UIButton = getButton()
+    
+    private lazy var startYearTitleLabel: UILabel = getTitleLabel(title: "Started")
+    private lazy var modificationTitleLabel: UILabel = getTitleLabel(title: "Modified")
+    private lazy var endYearTitleLabel: UILabel = getTitleLabel(title: "Ended")
+    private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
+    
+    private lazy var startYearLabel: UILabel = getSubTitleLabel()
+    private lazy var modificationDateLabel: UILabel = getSubTitleLabel()
+    private lazy var endYearLabel: UILabel = getSubTitleLabel()
+    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
+    
+    private lazy var firstSeparator: UIView = getSeparator()
+    private lazy var secondSeparator: UIView = getSeparator()
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.color = .systemRed
+        view.hidesWhenStopped = true
+        view.startAnimating()
         
         return view
     }()
@@ -111,6 +118,17 @@ final class EventDetailsVC: UIViewController {
         return view
     }
     
+    private func getButton() -> UIButton {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
+        button.titleLabel?.lineBreakMode = .byTruncatingMiddle
+        button.setTitleColor(.secondarySystemBackground, for: .highlighted)
+        
+        return button
+    }
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,6 +140,9 @@ final class EventDetailsVC: UIViewController {
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(saveButton)
         scrollView.addSubview(eventImageView)
+        scrollView.addSubview(activityIndicator)
+        scrollView.addSubview(nextButton)
+        scrollView.addSubview(previousButton)
         scrollView.addSubview(startYearTitleLabel)
         scrollView.addSubview(startYearLabel)
         scrollView.addSubview(firstSeparator)
@@ -144,13 +165,103 @@ final class EventDetailsVC: UIViewController {
         modificationDateLabel.text = ModelDateManager.shared.getDate(from: event.modified)
         endYearLabel.text = ModelDateManager.shared.getDate(from: event.end, getYearOnly: true)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
+        
+        /// Configuring the buttons
+        nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
+        previousButton.addTarget(self, action: #selector(didTapPrevious), for: .touchUpInside)
+        
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        
+        if let nextEventTitle = event.next?.name, let eventUrl = event.next?.resourceURI {
+            nextEvent = eventUrl.replacingOccurrences(of: "http://", with: "https://")
+            self.nextEventTitle = nextEventTitle
+            
+            nextButton.isHidden = false
+            nextButton.setTitle("\(nextEventTitle)  >>", for: .normal)
+            nextButton.setTitleColor(.systemRed, for: .normal)
+        }
+        
+        if let previousEventTitle = event.previous?.name, let eventUrl = event.previous?.resourceURI {
+            previousEvent = eventUrl.replacingOccurrences(of: "http://", with: "https://")
+            self.previousEventTitle = previousEventTitle
+            
+            previousButton.isHidden = false
+            previousButton.setTitle("<< \(previousEventTitle)", for: .normal)
+            previousButton.setTitleColor(.systemRed, for: .normal)
+        }
                 
         /// Getting the thumbnail image
         ModelImageManager.shared.getImageData(for: event.thumbnail) {
             [weak self] data in
             
             DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
                 self?.eventImageView.image = UIImage(data: data)
+            }
+        }
+    }
+    
+    // MARK: - ACTIONS
+    @objc private func didTapNext() {
+        activityIndicator.startAnimating()
+        
+        titleLabel.text = nextEventTitle
+        eventImageView.image = .none
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        startYearLabel.text = "Loading ..."
+        modificationDateLabel.text = "Loading ..."
+        endYearLabel.text = "Loading ..."
+        descriptionLabel.text = "Loading ..."
+        
+        let urlString = nextEvent + URLManager.shared.getAPIUserKeyInfo()
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            [weak self] in
+            
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parseJSON(json: data)
+                }
+            }
+        }
+    }
+    
+    @objc private func didTapPrevious() {
+        activityIndicator.startAnimating()
+        
+        titleLabel.text = previousEventTitle
+        eventImageView.image = .none
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        startYearLabel.text = "Loading ..."
+        modificationDateLabel.text = "Loading ..."
+        endYearLabel.text = "Loading ..."
+        descriptionLabel.text = "Loading ..."
+        
+        let urlString = previousEvent + URLManager.shared.getAPIUserKeyInfo()
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            [weak self] in
+            
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parseJSON(json: data)
+                }
+            }
+        }
+    }
+    
+    private func parseJSON(json: Data) {
+        let decoder = JSONDecoder()
+        
+        if let APIData = try? decoder.decode(Events.self, from: json) {
+            if let APIEvent = APIData.data.results.first {
+                DispatchQueue.main.async {
+                    [weak self] in
+                    self?.set(event: APIEvent)
+                }
             }
         }
     }
@@ -177,7 +288,20 @@ final class EventDetailsVC: UIViewController {
             eventImageView.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             eventImageView.heightAnchor.constraint(equalTo: view.widthAnchor, constant: -30),
             
-            startYearTitleLabel.topAnchor.constraint(equalTo: eventImageView.bottomAnchor, constant: 50),
+            activityIndicator.centerXAnchor.constraint(equalTo: eventImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: eventImageView.centerYAnchor),
+            
+            nextButton.topAnchor.constraint(equalTo: eventImageView.bottomAnchor, constant: 5),
+            nextButton.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            nextButton.widthAnchor.constraint(lessThanOrEqualToConstant: view.frame.width/2 - 50),
+            nextButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            previousButton.topAnchor.constraint(equalTo: nextButton.topAnchor),
+            previousButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            previousButton.widthAnchor.constraint(lessThanOrEqualToConstant: view.frame.width/2 - 30),
+            previousButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            startYearTitleLabel.topAnchor.constraint(equalTo: nextButton.bottomAnchor, constant: 25),
             startYearTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             startYearLabel.topAnchor.constraint(equalTo: startYearTitleLabel.bottomAnchor, constant: 5),
             startYearLabel.leadingAnchor.constraint(equalTo: startYearTitleLabel.leadingAnchor),

@@ -23,6 +23,17 @@ final class ComicImageCell: UICollectionViewCell {
         return imageView
     }()
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,6 +50,7 @@ final class ComicImageCell: UICollectionViewCell {
             [weak self] data in
             DispatchQueue.main.async {
                 let image = UIImage(data: data)
+                self?.activityIndicator.stopAnimating()
                 self?.imageView.image = image
 //                print(image?.size)
                 // TODO: FIX LATER
@@ -49,12 +61,16 @@ final class ComicImageCell: UICollectionViewCell {
     // MARK: - SUBVIEWS
     private func configureSubviews() {
         addSubview(imageView)
+        addSubview(activityIndicator)
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
         ])
     }
 }

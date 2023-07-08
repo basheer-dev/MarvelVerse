@@ -243,6 +243,8 @@ extension ComicDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicImageCell.id, for: indexPath) as? ComicImageCell else { fatalError() }
+        
+        cell.activityIndicator.startAnimating()
         cell.set(image: comicImages[indexPath.row])
         cell.contentMode = .scaleAspectFill
                 

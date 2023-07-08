@@ -44,8 +44,10 @@ final class ComicsVC: UIViewController {
     
     private func createTableViewFooter() -> UIView {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
+        
         activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
         activityIndicator.startAnimating()
+        activityIndicator.color = .systemRed
         
         return activityIndicator
     }
@@ -129,8 +131,10 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         
         /// Getting the thumbnail image
         cell.thumbNailImageView.image = .none
+        cell.activityIndicator.startAnimating()
         
         if thumbnails[comics[indexPath.row].id] != nil {
+            cell.activityIndicator.stopAnimating()
             cell.thumbNailImageView.image = UIImage(data: thumbnails[comics[indexPath.row].id]!)
         } else {
             ModelImageManager.shared.getImageData(for: comics[indexPath.row].thumbnail) {
@@ -138,6 +142,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
                 guard let strongSelf = self else { return }
                 
                 DispatchQueue.main.async {
+                    cell.activityIndicator.stopAnimating()
                     cell.thumbNailImageView.image = UIImage(data: data)
                     
                     if strongSelf.comics.count > indexPath.row {

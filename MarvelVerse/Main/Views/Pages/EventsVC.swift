@@ -43,8 +43,10 @@ final class EventsVC: UIViewController {
     
     private func createTableViewFooter() -> UIView {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
+        
         activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
         activityIndicator.startAnimating()
+        activityIndicator.color = .systemRed
         
         return activityIndicator
     }
@@ -127,9 +129,11 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(event: events[indexPath.row])
         
         /// Getting the thumbnail image
+        cell.activityIndicator.startAnimating()
         cell.thumbNailImageView.image = .none
         
         if thumbnails[events[indexPath.row].id] != nil {
+            cell.activityIndicator.stopAnimating()
             cell.thumbNailImageView.image = UIImage(data: thumbnails[events[indexPath.row].id]!)
         } else {
             ModelImageManager.shared.getImageData(for: events[indexPath.row].thumbnail) {
@@ -137,6 +141,7 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
+                    cell.activityIndicator.stopAnimating()
                     cell.thumbNailImageView.image = UIImage(data: data)
                     
                     if self.events.count > indexPath.row {

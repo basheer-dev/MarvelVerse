@@ -36,7 +36,7 @@ final class MainVC: UIViewController {
     
     private let sideMenu: UIView = {
         let menu = UIView()
-        menu.backgroundColor = .systemRed
+        menu.backgroundColor = .secondarySystemBackground
         
         menu.clipsToBounds = true
         
@@ -49,7 +49,7 @@ final class MainVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.backgroundColor = .systemRed
+        tableView.backgroundColor = .secondarySystemBackground
         
         return tableView
     }()
@@ -175,7 +175,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         cellInfo.textProperties.font = .systemFont(ofSize: 15, weight: .bold)
         
         cell.contentConfiguration = cellInfo
-        cell.backgroundColor = .systemRed
+        cell.backgroundColor = .secondarySystemBackground
         
         return cell
     }

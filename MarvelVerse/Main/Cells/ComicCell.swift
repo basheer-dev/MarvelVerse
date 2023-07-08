@@ -63,6 +63,17 @@ final class ComicCell: UITableViewCell {
         
         return label
     }()
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.color = .systemRed
+        view.startAnimating()
+        
+        return view
+    }()
         
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -81,17 +92,7 @@ final class ComicCell: UITableViewCell {
         titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
         pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
         thumbNailImageView.image = .none
-        
-        /// Handling the description
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
-        
-        /// Getting the thumbnail image
-//        URLManager.shared.getAPIImageData(image: comic.thumbnail) {
-//            [weak self] data in
-//            DispatchQueue.main.async {
-//                self?.thumbNailImageView.image = UIImage(data: data)
-//            }
-//        }
     }
     
     // MARK: - ACTIONS
@@ -99,18 +100,12 @@ final class ComicCell: UITableViewCell {
         print("save")
     }
     
-    @objc private func didTapComic() {
-        print(titleLabel.text ?? "")
-    }
-    
     // MARK: - SUBVIEWS
     private func configureSubviews() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
-//        thumbNailImageView.isUserInteractionEnabled = true
-//        thumbNailImageView.addGestureRecognizer(tapGesture)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         addSubview(thumbNailImageView)
+        addSubview(activityIndicator)
         addSubview(saveButton)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
@@ -121,6 +116,9 @@ final class ComicCell: UITableViewCell {
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -1),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 1),
             thumbNailImageView.heightAnchor.constraint(equalToConstant: 500),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: thumbNailImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: thumbNailImageView.centerYAnchor),
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

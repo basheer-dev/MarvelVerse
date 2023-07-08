@@ -125,14 +125,14 @@ extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.set(character: characters[indexPath.item])
         
         cell.backgroundColor = .secondarySystemBackground
-//        cell.layer.borderColor = CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.15)
-//        cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 15
         
         /// Getting the thumbnail image
+        cell.activityIndicator.startAnimating()
         cell.characterImageView.image = .none
         
         if thumbnails[characters[indexPath.item].id] != nil {
+            cell.activityIndicator.stopAnimating()
             cell.characterImageView.image = UIImage(data: thumbnails[characters[indexPath.item].id]!)
         } else {
             ModelImageManager.shared.getImageData(for: characters[indexPath.item].thumbnail) {
@@ -140,6 +140,7 @@ extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
+                    cell.activityIndicator.stopAnimating()
                     cell.characterImageView.image = UIImage(data: data)
                     
                     if self.characters.count > indexPath.item {

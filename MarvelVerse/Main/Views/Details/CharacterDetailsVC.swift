@@ -112,6 +112,17 @@ final class CharacterDetailsVC: UIViewController {
         return view
     }
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,6 +136,7 @@ final class CharacterDetailsVC: UIViewController {
 //        thumbnailImageView.addGestureRecognizer(tapGesture)
         
         scrollView.addSubview(thumbnailImageView)
+        scrollView.addSubview(activityIndicator)
         scrollView.addSubview(nameLabel)
         scrollView.addSubview(idLabel)
         scrollView.addSubview(comicsCountTitleLabel)
@@ -167,6 +179,7 @@ final class CharacterDetailsVC: UIViewController {
             [weak self] data in
             
             DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
                 self?.thumbnailImageView.image = UIImage(data: data)
             }
         }
@@ -200,6 +213,9 @@ final class CharacterDetailsVC: UIViewController {
             thumbnailImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             thumbnailImageView.widthAnchor.constraint(equalToConstant: 250),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 250),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: thumbnailImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: thumbnailImageView.centerYAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: 25),
             nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),

@@ -43,8 +43,10 @@ final class SeriesVC: UIViewController {
     
     private func createTableViewFooter() -> UIView {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
+        
         activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
         activityIndicator.startAnimating()
+        activityIndicator.color = .systemRed
         
         return activityIndicator
     }
@@ -126,9 +128,11 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(series: allSeries[indexPath.row])
         
         /// Getting the thumbnail image
+        cell.activityIndicator.startAnimating()
         cell.seriesImageView.image = .none
         
         if thumbnails[allSeries[indexPath.row].id] != nil {
+            cell.activityIndicator.stopAnimating()
             cell.seriesImageView.image = UIImage(data: thumbnails[allSeries[indexPath.row].id]!)
         } else {
             ModelImageManager.shared.getImageData(for: allSeries[indexPath.row].thumbnail) {
@@ -136,6 +140,7 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
+                    cell.activityIndicator.stopAnimating()
                     cell.seriesImageView.image = UIImage(data: data)
                     
                     if self.allSeries.count > indexPath.row {

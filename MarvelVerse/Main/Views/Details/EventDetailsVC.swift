@@ -178,7 +178,7 @@ final class EventDetailsVC: UIViewController {
             self.nextEventTitle = nextEventTitle
             
             nextButton.isHidden = false
-            nextButton.setTitle("\(nextEventTitle)  >>", for: .normal)
+            nextButton.setTitle("\(nextEventTitle) >", for: .normal)
             nextButton.setTitleColor(.systemRed, for: .normal)
         }
         
@@ -187,7 +187,7 @@ final class EventDetailsVC: UIViewController {
             self.previousEventTitle = previousEventTitle
             
             previousButton.isHidden = false
-            previousButton.setTitle("<< \(previousEventTitle)", for: .normal)
+            previousButton.setTitle("< \(previousEventTitle)", for: .normal)
             previousButton.setTitleColor(.systemRed, for: .normal)
         }
                 

@@ -64,6 +64,17 @@ final class EventCell: UITableViewCell {
         return label
     }()
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -93,6 +104,7 @@ final class EventCell: UITableViewCell {
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         addSubview(thumbNailImageView)
+        addSubview(activityIndicator)
         addSubview(saveButton)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
@@ -103,6 +115,9 @@ final class EventCell: UITableViewCell {
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -1),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 1),
             thumbNailImageView.heightAnchor.constraint(equalTo: widthAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: thumbNailImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: thumbNailImageView.centerYAnchor),
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

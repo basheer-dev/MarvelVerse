@@ -46,6 +46,17 @@ final class CharacterCell: UICollectionViewCell {
         return label
     }()
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,6 +76,7 @@ final class CharacterCell: UICollectionViewCell {
     // MARK: - SUBVIEWS
     private func configureSubviews() {
         addSubview(characterImageView)
+        addSubview(activityIndicator)
         addSubview(nameLabel)
         addSubview(descriptionLabel)
         
@@ -73,6 +85,9 @@ final class CharacterCell: UICollectionViewCell {
             characterImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             characterImageView.widthAnchor.constraint(equalToConstant: 100),
             characterImageView.heightAnchor.constraint(equalToConstant: 100),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: characterImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: 15),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),

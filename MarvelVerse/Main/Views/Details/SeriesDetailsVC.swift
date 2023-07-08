@@ -123,6 +123,17 @@ final class SeriesDetailsVC: UIViewController {
         return view
     }
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,6 +146,7 @@ final class SeriesDetailsVC: UIViewController {
         scrollView.addSubview(typeLabel)
         scrollView.addSubview(saveButton)
         scrollView.addSubview(seriesImageView)
+        scrollView.addSubview(activityIndicator)
         scrollView.addSubview(ratingLabel)
         scrollView.addSubview(startYearTitleLabel)
         scrollView.addSubview(startYearLabel)
@@ -165,6 +177,7 @@ final class SeriesDetailsVC: UIViewController {
         ModelImageManager.shared.getImageData(for: series.thumbnail) {
             [weak self] data in
             DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
                 self?.seriesImageView.image = UIImage(data: data)
             }
         }
@@ -194,6 +207,9 @@ final class SeriesDetailsVC: UIViewController {
             seriesImageView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             seriesImageView.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             seriesImageView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: seriesImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: seriesImageView.centerYAnchor),
             
             ratingLabel.topAnchor.constraint(equalTo: seriesImageView.bottomAnchor, constant: 5),
             ratingLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),

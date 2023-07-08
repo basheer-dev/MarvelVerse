@@ -11,10 +11,13 @@ final class SeriesCell: UITableViewCell {
     static let id = "SeriesContainer"
     
     let seriesImageView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        return view
+        imageView.layer.borderColor = UIColor(cgColor: CGColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.2)).cgColor
+        imageView.layer.borderWidth = 1
+        
+        return imageView
     }()
     
     private let saveButton: UIButton = {
@@ -61,6 +64,17 @@ final class SeriesCell: UITableViewCell {
         return label
     }()
     
+    let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.hidesWhenStopped = true
+        view.startAnimating()
+        view.color = .systemRed
+        
+        return view
+    }()
+    
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -91,6 +105,7 @@ final class SeriesCell: UITableViewCell {
     // MARK: -  SUBVIEWS
     private func configureSubviews() {
         addSubview(seriesImageView)
+        addSubview(activityIndicator)
         addSubview(saveButton)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
@@ -101,6 +116,9 @@ final class SeriesCell: UITableViewCell {
             seriesImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -1),
             seriesImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 1),
             seriesImageView.heightAnchor.constraint(equalTo: widthAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             saveButton.topAnchor.constraint(equalTo: seriesImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

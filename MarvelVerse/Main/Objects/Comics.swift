@@ -26,4 +26,5 @@ struct Comic: Codable {
     let images: [APIImage]?
     let dates: [APIDate]?
     let prices: [APIPrice]?
+    let urls: [APIUrl]?
 }

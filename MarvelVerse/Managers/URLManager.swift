@@ -29,4 +29,24 @@ class URLManager {
             String(format: "%02hhx", $0)
         }.joined()
     }
+    
+    func getURL(from urls: [APIUrl]?, isDetailsURL: Bool = false, isPurchaseURL: Bool = false, isComicsURL: Bool = false) -> String {
+        guard let urls = urls else { return "" }
+        
+        for url in urls {
+            if let urlType = url.type {
+                if let urlPath = url.url {
+                    if urlType == "detail" && isDetailsURL {
+                        return urlPath.replacingOccurrences(of: "http://", with: "https://")
+                    } else if urlType == "purchase" && isPurchaseURL {
+                        return urlPath.replacingOccurrences(of: "http://", with: "https://")
+                    } else if urlType == "comiclink" && isComicsURL {
+                        return urlPath.replacingOccurrences(of: "http://", with: "https://")
+                    }
+                }
+            }
+        }
+        
+        return ""
+    }
 }

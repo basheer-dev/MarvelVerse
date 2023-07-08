@@ -23,4 +23,5 @@ struct Character: Codable {
     let thumbnail: APIImage?
     let comics: APICollection?
     let series: APICollection?
+    let urls: [APIUrl]?
 }

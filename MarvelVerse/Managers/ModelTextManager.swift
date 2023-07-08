@@ -49,10 +49,12 @@ class ModelTextManager {
             guard let priceType = price.type,
                   let priceValue = price.price else { return "N/A"}
             
-            if isPrintPrice && priceType == "printPrice" {
-                return "$ \(priceValue)"
-            } else if isDigitalCopyPrice && priceType == "digitalPurchasePrice" {
-                return "$ \(priceValue)"
+            if priceValue > 0.0 {
+                if isPrintPrice && priceType == "printPrice" {
+                    return "$ \(priceValue)"
+                } else if isDigitalCopyPrice && priceType == "digitalPurchasePrice" {
+                    return "$ \(priceValue)"
+                }
             }
         }
         

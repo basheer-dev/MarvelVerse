@@ -25,4 +25,5 @@ struct Event: Codable {
     let thumbnail: APIImage?
     let next: APIObject?
     let previous: APIObject?
+    let urls: [APIUrl]?
 }

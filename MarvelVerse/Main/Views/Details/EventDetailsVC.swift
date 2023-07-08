@@ -129,6 +129,21 @@ final class EventDetailsVC: UIViewController {
         return button
     }
     
+    private let detailsButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.configuration = .tinted()
+        button.configuration?.cornerStyle = .medium
+        button.configuration?.title = "Details"
+        button.configuration?.baseBackgroundColor = .systemCyan
+        button.configuration?.baseForegroundColor = .systemCyan
+        
+        return button
+    }()
+    
+    private var detailsURLString: String = ""
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,6 +168,7 @@ final class EventDetailsVC: UIViewController {
         scrollView.addSubview(endYearLabel)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
+        scrollView.addSubview(detailsButton)
         
         view.addSubview(scrollView)
         
@@ -199,6 +215,15 @@ final class EventDetailsVC: UIViewController {
                 self?.activityIndicator.stopAnimating()
                 self?.eventImageView.image = UIImage(data: data)
             }
+        }
+        
+        /// Getting the urls
+        detailsURLString = URLManager.shared.getURL(from: event.urls, isDetailsURL: true)
+        
+        if detailsURLString.isEmpty {
+            detailsButton.configuration?.baseBackgroundColor = .systemGray
+            detailsButton.configuration?.baseForegroundColor = .systemGray
+            detailsButton.isUserInteractionEnabled = false
         }
     }
     
@@ -332,7 +357,13 @@ final class EventDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
+//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
+            
+            detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
+            detailsButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+            detailsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            detailsButton.widthAnchor.constraint(equalToConstant: 150),
+            detailsButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 }

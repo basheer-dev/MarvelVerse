@@ -25,4 +25,5 @@ struct Series: Codable {
     let rating: String?
     let type: String?
     let thumbnail: APIImage?
+    let urls: [APIUrl]?
 }

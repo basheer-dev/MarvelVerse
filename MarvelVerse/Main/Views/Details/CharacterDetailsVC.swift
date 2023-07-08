@@ -123,6 +123,35 @@ final class CharacterDetailsVC: UIViewController {
         return view
     }()
     
+    private let detailsButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.configuration = .tinted()
+        button.configuration?.cornerStyle = .medium
+        button.configuration?.title = "Details"
+        button.configuration?.baseBackgroundColor = .systemCyan
+        button.configuration?.baseForegroundColor = .systemCyan
+        
+        return button
+    }()
+    
+    private let comicsButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.configuration = .tinted()
+        button.configuration?.cornerStyle = .medium
+        button.configuration?.title = "Comics"
+        button.configuration?.baseBackgroundColor = .systemPurple
+        button.configuration?.baseForegroundColor = .systemPurple
+        
+        return button
+    }()
+    
+    private var detailsURLString: String = ""
+    private var comicsURLString: String = ""
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +178,8 @@ final class CharacterDetailsVC: UIViewController {
         scrollView.addSubview(modificationLabel)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
+        scrollView.addSubview(detailsButton)
+        scrollView.addSubview(comicsButton)
         
         view.addSubview(scrollView)
         configureLayouts()
@@ -182,6 +213,22 @@ final class CharacterDetailsVC: UIViewController {
                 self?.activityIndicator.stopAnimating()
                 self?.thumbnailImageView.image = UIImage(data: data)
             }
+        }
+        
+        /// Getting the urls
+        detailsURLString = URLManager.shared.getURL(from: character.urls, isDetailsURL: true)
+        comicsURLString = URLManager.shared.getURL(from: character.urls, isComicsURL: true)
+        
+        if detailsURLString.isEmpty {
+            detailsButton.configuration?.baseBackgroundColor = .systemGray
+            detailsButton.configuration?.baseForegroundColor = .systemGray
+            detailsButton.isUserInteractionEnabled = false
+        }
+        
+        if comicsURLString.isEmpty {
+            comicsButton.configuration?.baseBackgroundColor = .systemGray
+            comicsButton.configuration?.baseForegroundColor = .systemGray
+            comicsButton.isUserInteractionEnabled = false
         }
     }
     
@@ -258,7 +305,18 @@ final class CharacterDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
+//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50)
+            
+            detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
+            detailsButton.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 15),
+            detailsButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -25),
+            detailsButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            comicsButton.topAnchor.constraint(equalTo: detailsButton.topAnchor),
+            comicsButton.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: -15),
+            comicsButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 25),
+            comicsButton.heightAnchor.constraint(equalToConstant: 44),
+            comicsButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25)
         ])
     }
 }

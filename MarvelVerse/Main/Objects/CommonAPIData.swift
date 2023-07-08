@@ -30,3 +30,8 @@ struct APIPrice: Codable {
     let type: String?
     let price: Float?
 }
+
+struct APIUrl: Codable {
+    let type: String?
+    let url: String?
+}

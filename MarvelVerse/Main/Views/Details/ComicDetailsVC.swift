@@ -149,6 +149,35 @@ final class ComicDetailsVC: UIViewController {
         return label
     }
     
+    private let detailsButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.configuration = .tinted()
+        button.configuration?.cornerStyle = .medium
+        button.configuration?.title = "Details"
+        button.configuration?.baseBackgroundColor = .systemCyan
+        button.configuration?.baseForegroundColor = .systemCyan
+        
+        return button
+    }()
+    
+    private let purchaseButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.configuration = .tinted()
+        button.configuration?.cornerStyle = .medium
+        button.configuration?.title = "Purchase"
+        button.configuration?.baseBackgroundColor = .systemGreen
+        button.configuration?.baseForegroundColor = .systemGreen
+        
+        return button
+    }()
+    
+    private var detailsURLString: String = ""
+    private var purchaseURLString: String = ""
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -174,6 +203,8 @@ final class ComicDetailsVC: UIViewController {
         scrollView.addSubview(printPriceLabel)
         scrollView.addSubview(digitalCopyPriceTitleLabel)
         scrollView.addSubview(digitalCopyPriceLabel)
+        scrollView.addSubview(detailsButton)
+        scrollView.addSubview(purchaseButton)
         
         view.addSubview(scrollView)
         
@@ -190,6 +221,15 @@ final class ComicDetailsVC: UIViewController {
         printPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isPrintPrice: true)
         digitalCopyPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isDigitalCopyPrice: true)
         
+        
+        if printPriceLabel.text == "N/A" {
+            printPriceLabel.textColor = .systemRed
+        }
+        
+        if digitalCopyPriceLabel.text == "N/A" {
+            digitalCopyPriceLabel.textColor = .systemRed
+        }
+        
         /// Getting the comic's thumbnail and related images
         if let thumbnail = comic.thumbnail {
             comicImages.append(thumbnail)
@@ -198,6 +238,22 @@ final class ComicDetailsVC: UIViewController {
             self.comicImages += comicImages
         }
         collectionView.reloadData()
+        
+        /// Getting the urls
+        detailsURLString = URLManager.shared.getURL(from: comic.urls, isDetailsURL: true)
+        purchaseURLString = URLManager.shared.getURL(from: comic.urls, isPurchaseURL: true)
+        
+        if detailsURLString.isEmpty {
+            detailsButton.configuration?.baseBackgroundColor = .systemGray
+            detailsButton.configuration?.baseForegroundColor = .systemGray
+            detailsButton.isUserInteractionEnabled = false
+        }
+        
+        if purchaseURLString.isEmpty {
+            purchaseButton.configuration?.baseBackgroundColor = .systemGray
+            purchaseButton.configuration?.baseForegroundColor = .systemGray
+            purchaseButton.isUserInteractionEnabled = false
+        }
     }
     
     // MARK: - ACTIONS
@@ -270,7 +326,18 @@ final class ComicDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50),
+//            descriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -75),
+            
+            detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
+            detailsButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 15),
+            detailsButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -25),
+            detailsButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            purchaseButton.topAnchor.constraint(equalTo: detailsButton.topAnchor),
+            purchaseButton.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor, constant: -15),
+            purchaseButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 25),
+            purchaseButton.heightAnchor.constraint(equalToConstant: 44),
+            purchaseButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25)
         ])
     }
 }

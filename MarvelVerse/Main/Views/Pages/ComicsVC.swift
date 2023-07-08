@@ -99,7 +99,7 @@ final class ComicsVC: UIViewController {
 }
 
 
-// MARK: APISEARCH EXT
+// MARK: - APISEARCH EXT
 extension ComicsVC: APIDataSearch {
     
     func didSearchFor(title: String) {

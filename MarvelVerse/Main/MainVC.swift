@@ -22,8 +22,8 @@ final class MainVC: UIViewController {
     enum Pages: String, CaseIterable {
         case comics = "Comics"
         case series = "Series"
+        case Events = "Events"
         case characters = "Characters"
-        case stories = "Stories"
     }
     
     private lazy var searchController: UISearchController = {
@@ -202,7 +202,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             dest = SeriesVC()
         case Pages.characters.rawValue:
             dest = CharactersVC()
-        case Pages.stories.rawValue:
+        case Pages.Events.rawValue:
             dest = EventsVC()
         default:
             dest = ComicsVC()

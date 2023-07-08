@@ -16,3 +16,12 @@ struct APIDate: Codable {
     let type: String?
     let date: String?
 }
+
+struct APICollection: Codable {
+    let available: Int?
+}
+
+struct APIObject: Codable {
+    let resourceURI: String?
+    let name: String?
+}

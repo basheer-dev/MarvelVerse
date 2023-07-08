@@ -1,13 +1,13 @@
 //
-//  SeriesDetailsVC.swift
+//  EventDetailsVC.swift
 //  MarvelVerse
 //
-//  Created by Basheer Abdulmalik on 05/07/2023.
+//  Created by Basheer Abdulmalik on 08/07/2023.
 //
 
 import UIKit
 
-final class SeriesDetailsVC: UIViewController {
+final class EventDetailsVC: UIViewController {
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -24,21 +24,34 @@ final class SeriesDetailsVC: UIViewController {
         
         label.textColor = .systemRed
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.font = .systemFont(ofSize: 18, weight: .bold)
         
         return label
     }()
     
-    private let typeLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.textColor = .systemGray
-        label.textAlignment = .left
-        label.font = .systemFont(ofSize: 10, weight: .bold)
-        
-        return label
-    }()
+//    private let typeLabel: UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.textColor = .systemGray
+//        label.textAlignment = .left
+//        label.font = .systemFont(ofSize: 10, weight: .bold)
+//
+//        return label
+//    }()
+    
+    private lazy var startYearTitleLabel: UILabel = getTitleLabel(title: "Started")
+    private lazy var modificationTitleLabel: UILabel = getTitleLabel(title: "Modified")
+    private lazy var endYearTitleLabel: UILabel = getTitleLabel(title: "Ended")
+    private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
+    
+    private lazy var startYearLabel: UILabel = getSubTitleLabel()
+    private lazy var modificationDateLabel: UILabel = getSubTitleLabel()
+    private lazy var endYearLabel: UILabel = getSubTitleLabel()
+    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
+    
+    private lazy var firstSeparator: UIView = getSeparator()
+    private lazy var secondSeparator: UIView = getSeparator()
     
     private let saveButton: UIButton = {
         let button = UIButton()
@@ -51,7 +64,7 @@ final class SeriesDetailsVC: UIViewController {
         return button
     }()
     
-    private let seriesImageView: UIImageView = {
+    private let eventImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -63,31 +76,6 @@ final class SeriesDetailsVC: UIViewController {
         
         return view
     }()
-    
-    private let ratingLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.font = .systemFont(ofSize: 10, weight: .bold)
-        label.textColor = .systemGray
-        label.textAlignment = .right
-        
-        return label
-    }()
-    
-    private lazy var startYearTitleLabel: UILabel = getTitleLabel(title: "Started")
-    private lazy var endYearTitleLabel: UILabel = getTitleLabel(title: "Ended")
-    private lazy var modificationTitleLabel: UILabel = getTitleLabel(title: "Modified")
-    
-    private lazy var startYearLabel: UILabel = getSubTitleLabel()
-    private lazy var endYearLabel: UILabel = getSubTitleLabel()
-    private lazy var modificationDateLabel: UILabel = getSubTitleLabel()
-    
-    private lazy var firstSeparator: UIView = getSeparator()
-    private lazy var secondSeparator: UIView = getSeparator()
-    
-    private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
-    private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
     private func getTitleLabel(title: String) -> UILabel {
         let label = UILabel()
@@ -132,18 +120,16 @@ final class SeriesDetailsVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         scrollView.addSubview(titleLabel)
-        scrollView.addSubview(typeLabel)
         scrollView.addSubview(saveButton)
-        scrollView.addSubview(seriesImageView)
-        scrollView.addSubview(ratingLabel)
+        scrollView.addSubview(eventImageView)
         scrollView.addSubview(startYearTitleLabel)
         scrollView.addSubview(startYearLabel)
-        scrollView.addSubview(endYearTitleLabel)
-        scrollView.addSubview(endYearLabel)
+        scrollView.addSubview(firstSeparator)
         scrollView.addSubview(modificationTitleLabel)
         scrollView.addSubview(modificationDateLabel)
-        scrollView.addSubview(firstSeparator)
         scrollView.addSubview(secondSeparator)
+        scrollView.addSubview(endYearTitleLabel)
+        scrollView.addSubview(endYearLabel)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
         
@@ -152,20 +138,19 @@ final class SeriesDetailsVC: UIViewController {
         configureLayouts()
     }
     
-    func set(series: Series) {
-        titleLabel.text = ModelTextManager.shared.getTitle(from: series.title)
-        typeLabel.text = "Type | \(ModelTextManager.shared.getStringInfo(from: series.type))"
-        ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
-        startYearLabel.text = ModelDateManager.shared.getYear(from: series.startYear)
-        endYearLabel.text = ModelDateManager.shared.getYear(from: series.endYear)
-        modificationDateLabel.text = ModelDateManager.shared.getDate(from: series.modified)
-        descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
-        
-        ///Getting the series image
-        ModelImageManager.shared.getImageData(for: series.thumbnail) {
+    func set(event: Event) {
+        titleLabel.text = event.title
+        startYearLabel.text = ModelDateManager.shared.getDate(from: event.start, getYearOnly: true)
+        modificationDateLabel.text = ModelDateManager.shared.getDate(from: event.modified)
+        endYearLabel.text = ModelDateManager.shared.getDate(from: event.end, getYearOnly: true)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
+                
+        /// Getting the thumbnail image
+        ModelImageManager.shared.getImageData(for: event.thumbnail) {
             [weak self] data in
+            
             DispatchQueue.main.async {
-                self?.seriesImageView.image = UIImage(data: data)
+                self?.eventImageView.image = UIImage(data: data)
             }
         }
     }
@@ -182,49 +167,40 @@ final class SeriesDetailsVC: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             titleLabel.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -10),
             
-            typeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 1),
-            typeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
             saveButton.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             saveButton.widthAnchor.constraint(equalToConstant: 20),
             saveButton.heightAnchor.constraint(equalToConstant: 20),
             
-            seriesImageView.topAnchor.constraint(equalTo: typeLabel.bottomAnchor, constant: 50),
-            seriesImageView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            seriesImageView.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            seriesImageView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            eventImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
+            eventImageView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            eventImageView.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            eventImageView.heightAnchor.constraint(equalTo: view.widthAnchor, constant: -30),
             
-            ratingLabel.topAnchor.constraint(equalTo: seriesImageView.bottomAnchor, constant: 5),
-            ratingLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            
-            startYearTitleLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 50),
+            startYearTitleLabel.topAnchor.constraint(equalTo: eventImageView.bottomAnchor, constant: 50),
             startYearTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
             startYearLabel.topAnchor.constraint(equalTo: startYearTitleLabel.bottomAnchor, constant: 5),
             startYearLabel.leadingAnchor.constraint(equalTo: startYearTitleLabel.leadingAnchor),
-            
-            modificationTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            modificationTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
-            
-            modificationDateLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
-            modificationDateLabel.centerXAnchor.constraint(equalTo: modificationTitleLabel.centerXAnchor),
-            
-            endYearTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
-            endYearTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
-            
-            endYearLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
-            endYearLabel.trailingAnchor.constraint(equalTo: endYearTitleLabel.trailingAnchor),
             
             firstSeparator.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
             firstSeparator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -view.frame.width/4 + 25),
             firstSeparator.bottomAnchor.constraint(equalTo: startYearLabel.bottomAnchor),
             firstSeparator.widthAnchor.constraint(equalToConstant: 2),
             
+            modificationTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            modificationTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
+            modificationDateLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
+            modificationDateLabel.centerXAnchor.constraint(equalTo: modificationTitleLabel.centerXAnchor),
+            
             secondSeparator.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
             secondSeparator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.frame.width/4 - 25),
             secondSeparator.bottomAnchor.constraint(equalTo: startYearLabel.bottomAnchor),
             secondSeparator.widthAnchor.constraint(equalToConstant: 2),
+            
+            endYearTitleLabel.topAnchor.constraint(equalTo: startYearTitleLabel.topAnchor),
+            endYearTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
+            endYearLabel.topAnchor.constraint(equalTo: startYearLabel.topAnchor),
+            endYearLabel.trailingAnchor.constraint(equalTo: endYearTitleLabel.trailingAnchor),
             
             descriptionTitleLabel.topAnchor.constraint(equalTo: startYearLabel.bottomAnchor, constant: 50),
             descriptionTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),

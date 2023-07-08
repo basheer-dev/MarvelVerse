@@ -98,8 +98,8 @@ final class SeriesCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             seriesImageView.topAnchor.constraint(equalTo: topAnchor),
-            seriesImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            seriesImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            seriesImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -1),
+            seriesImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 1),
             seriesImageView.heightAnchor.constraint(equalTo: widthAnchor),
             
             saveButton.topAnchor.constraint(equalTo: seriesImageView.bottomAnchor, constant: 10),

@@ -1,14 +1,14 @@
 //
-//  ComicCell.swift
+//  EventCell.swift
 //  MarvelVerse
 //
-//  Created by Basheer Abdulmalik on 02/07/2023.
+//  Created by Basheer Abdulmalik on 08/07/2023.
 //
 
 import UIKit
 
-final class ComicCell: UITableViewCell {
-    static let id: String = "ComicContainer"
+final class EventCell: UITableViewCell {
+    static let id: String = "EventContainer"
     
     let thumbNailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -54,7 +54,7 @@ final class ComicCell: UITableViewCell {
         return label
     }()
     
-    private let pagesCountLabel: UILabel = {
+    private let startYearLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -63,7 +63,7 @@ final class ComicCell: UITableViewCell {
         
         return label
     }()
-        
+    
     // MARK: - INIT
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -77,21 +77,10 @@ final class ComicCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(comic: Comic) {
-        titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
-        pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
-        thumbNailImageView.image = .none
-        
-        /// Handling the description
-        descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
-        
-        /// Getting the thumbnail image
-//        URLManager.shared.getAPIImageData(image: comic.thumbnail) {
-//            [weak self] data in
-//            DispatchQueue.main.async {
-//                self?.thumbNailImageView.image = UIImage(data: data)
-//            }
-//        }
+    func set(event: Event) {
+        titleLabel.text = ModelTextManager.shared.getTitle(from: event.title)
+        descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
+        startYearLabel.text = ModelDateManager.shared.getDate(from: event.start, getYearOnly: true)
     }
     
     // MARK: - ACTIONS
@@ -99,28 +88,21 @@ final class ComicCell: UITableViewCell {
         print("save")
     }
     
-    @objc private func didTapComic() {
-        print(titleLabel.text ?? "")
-    }
-    
     // MARK: - SUBVIEWS
     private func configureSubviews() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapComic))
-//        thumbNailImageView.isUserInteractionEnabled = true
-//        thumbNailImageView.addGestureRecognizer(tapGesture)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         addSubview(thumbNailImageView)
         addSubview(saveButton)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
-        addSubview(pagesCountLabel)
+        addSubview(startYearLabel)
         
         NSLayoutConstraint.activate([
             thumbNailImageView.topAnchor.constraint(equalTo: topAnchor),
             thumbNailImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -1),
             thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 1),
-            thumbNailImageView.heightAnchor.constraint(equalToConstant: 500),
+            thumbNailImageView.heightAnchor.constraint(equalTo: widthAnchor),
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
@@ -135,9 +117,9 @@ final class ComicCell: UITableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            pagesCountLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
-            pagesCountLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            pagesCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
+            startYearLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
+            startYearLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            startYearLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
         ])
     }
 }

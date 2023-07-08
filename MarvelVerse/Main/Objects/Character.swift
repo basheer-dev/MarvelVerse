@@ -21,10 +21,6 @@ struct Character: Codable {
     let description: String?
     let modified: String?
     let thumbnail: APIImage?
-    let comics: CharacterCollection?
-    let series: CharacterCollection?
-}
-
-struct CharacterCollection: Codable {
-    let available: Int?
+    let comics: APICollection?
+    let series: APICollection?
 }

@@ -53,14 +53,14 @@ final class ComicsVC: UIViewController {
     // MARK: - DATA
     private func fetchData(title: String = "", offset: Int = 0) {
         var urlString = "https://gateway.marvel.com:443/v1/public/comics"
-        urlString += URLManager.shared.getAPIUserKeyInfo()
+        urlString += URLManager.shared.getAPIUserKeyInfo() + "&orderBy=title"
         
         if offset > 0 {
             urlString += "&offset=\(offset)&limit=20"
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&orderBy=title&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
         }
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -89,6 +89,8 @@ final class ComicsVC: UIViewController {
                     if self.comics.contains(where: { $0.id == comic.id }) == false && comic.thumbnail?.path?.contains("/image_not_available") == false {
                         self.comics.append(comic)
                         self.tableView.insertRows(at: [IndexPath(row: self.comics.count - 1, section: 0)], with: .automatic)
+                    } else {
+                        globalOffset += 1
                     }
                 }
             }
@@ -160,12 +162,7 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
             /// The user has reached the bottom
             /// Get more data
 
-            if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
-                globalOffset += comics.count
-                fetchData(offset: globalOffset)
-            } else {
-                fetchData(title: searchTitle, offset: comics.count)
-            }
+            fetchData(title: searchTitle, offset: comics.count + globalOffset)
         }
     }
 }

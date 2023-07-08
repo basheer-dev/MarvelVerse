@@ -52,14 +52,14 @@ final class SeriesVC: UIViewController {
     // MARK: - DATA
     private func fetchData(title: String = "", offset: Int = 0) {
         var urlString = "https://gateway.marvel.com:443/v1/public/series"
-        urlString += URLManager.shared.getAPIUserKeyInfo()
+        urlString += URLManager.shared.getAPIUserKeyInfo() + "&orderBy=title"
         
         if offset > 0 {
             urlString += "&offset=\(offset)&limit=20"
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&orderBy=title&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
         }
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -88,6 +88,8 @@ final class SeriesVC: UIViewController {
                     if self.allSeries.contains(where: { $0.id == series.id }) == false && series.thumbnail?.path?.contains("/image_not_available") == false {
                         self.allSeries.append(series)
                         self.tableView.insertRows(at: [IndexPath(row: self.allSeries.count - 1, section: 0)], with: .automatic)
+                    } else {
+                        globalOffset += 1
                     }
                 }
             }
@@ -155,12 +157,7 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == allSeries.count - 1 {
-            if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
-                globalOffset += allSeries.count
-                fetchData(offset: globalOffset)
-            } else {
-                fetchData(title: searchTitle, offset: allSeries.count)
-            }
+            fetchData(title: searchTitle, offset: allSeries.count + globalOffset)
         }
     }
 }

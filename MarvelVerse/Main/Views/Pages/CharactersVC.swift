@@ -52,14 +52,14 @@ final class CharactersVC: UIViewController {
     // MARK: - DATA
     private func fetchData(title: String = "", offset: Int = 0) {
         var urlString = "https://gateway.marvel.com:443/v1/public/characters"
-        urlString += URLManager.shared.getAPIUserKeyInfo()
+        urlString += URLManager.shared.getAPIUserKeyInfo() + "&orderBy=name"
         
         if offset > 0 {
             urlString += "&offset=\(offset)&limit=20"
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&orderBy=name&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
         }
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -87,6 +87,8 @@ final class CharactersVC: UIViewController {
                     if self.characters.contains(where: { $0.id == character.id }) == false && character.thumbnail?.path?.contains("/image_not_available") == false {
                         self.characters.append(character)
                         self.collectionView.insertItems(at: [IndexPath(item: self.characters.count - 1, section: 0)])
+                    } else {
+                        self.globalOffset += 1
                     }
                 }
             }
@@ -159,12 +161,7 @@ extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == characters.count - 1 {
-            if searchTitle.trimmingCharacters(in: .whitespaces).isEmpty {
-                globalOffset += characters.count
-                fetchData(offset: globalOffset)
-            } else {
-                fetchData(title: searchTitle, offset: characters.count)
-            }
+            fetchData(title: searchTitle, offset: characters.count + globalOffset)
         }
     }
 }

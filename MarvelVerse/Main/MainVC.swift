@@ -148,6 +148,7 @@ extension MainVC: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
+        searchBar.placeholder = searchText.trimmingCharacters(in: .whitespaces).isEmpty ? "Search" : searchText
         delegate?.didSearchFor(title: searchText)
     }
     

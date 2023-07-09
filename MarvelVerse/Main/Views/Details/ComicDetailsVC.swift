@@ -154,10 +154,9 @@ final class ComicDetailsVC: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.configuration = .tinted()
+        button.configuration = .gray()
         button.configuration?.cornerStyle = .medium
         button.configuration?.title = "Details"
-        button.configuration?.baseBackgroundColor = .systemCyan
         button.configuration?.baseForegroundColor = .systemCyan
         
         return button
@@ -167,10 +166,9 @@ final class ComicDetailsVC: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.configuration = .tinted()
+        button.configuration = .gray()
         button.configuration?.cornerStyle = .medium
         button.configuration?.title = "Purchase"
-        button.configuration?.baseBackgroundColor = .systemGreen
         button.configuration?.baseForegroundColor = .systemGreen
         
         return button
@@ -246,13 +244,11 @@ final class ComicDetailsVC: UIViewController {
         purchaseURLString = URLManager.shared.getURL(from: comic.urls, isPurchaseURL: true)
         
         if detailsURLString.isEmpty {
-            detailsButton.configuration?.baseBackgroundColor = .systemGray
             detailsButton.configuration?.baseForegroundColor = .systemGray
             detailsButton.isUserInteractionEnabled = false
         }
         
         if purchaseURLString.isEmpty {
-            purchaseButton.configuration?.baseBackgroundColor = .systemGray
             purchaseButton.configuration?.baseForegroundColor = .systemGray
             purchaseButton.isUserInteractionEnabled = false
         }

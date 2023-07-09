@@ -138,10 +138,9 @@ final class SeriesDetailsVC: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.configuration = .tinted()
-        button.configuration?.cornerStyle = .capsule
+        button.configuration = .gray()
+        button.configuration?.cornerStyle = .medium
         button.configuration?.title = "Details"
-        button.configuration?.baseBackgroundColor = .systemCyan
         button.configuration?.baseForegroundColor = .systemCyan
         
         return button
@@ -203,7 +202,6 @@ final class SeriesDetailsVC: UIViewController {
         detailsURLString = URLManager.shared.getURL(from: series.urls, isDetailsURL: true)
         
         if detailsURLString.isEmpty {
-            detailsButton.configuration?.baseBackgroundColor = .systemGray
             detailsButton.configuration?.baseForegroundColor = .systemGray
             detailsButton.isUserInteractionEnabled = false
         }
@@ -277,8 +275,8 @@ final class SeriesDetailsVC: UIViewController {
             
             detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
             detailsButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25),
-            detailsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            detailsButton.widthAnchor.constraint(equalToConstant: 200),
+            detailsButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 25),
+            detailsButton.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor, constant: -25),
             detailsButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }

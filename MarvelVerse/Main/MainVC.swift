@@ -173,6 +173,10 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         cell.contentConfiguration = cellInfo
         cell.backgroundColor = .secondarySystemBackground
         
+        if title == Pages.comics.rawValue && cellInfo.text == Pages.comics.rawValue {
+            cell.backgroundColor = .systemRed
+        }
+        
         return cell
     }
     
@@ -193,15 +197,20 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         
         // Adding the new view controller
         let dest: UIViewController
+        let row: Int
         
         switch title {
         case Pages.series.rawValue:
+            row = 1
             dest = SeriesVC()
         case Pages.characters.rawValue:
+            row = 3
             dest = CharactersVC()
         case Pages.Events.rawValue:
+            row = 2
             dest = EventsVC()
         default:
+            row = 0
             dest = ComicsVC()
         }
         
@@ -219,6 +228,11 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         isSideMenuActive = false
         showHideSideMenu()
         
+        for cell in menuTable.visibleCells {
+            cell.backgroundColor = .clear
+        }
+        
+        menuTable.cellForRow(at: IndexPath(row: row, section: 0))?.backgroundColor = .systemRed
         self.title = title
     }
 }

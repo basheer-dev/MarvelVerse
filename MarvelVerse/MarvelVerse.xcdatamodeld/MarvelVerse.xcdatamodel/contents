@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F66" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CharacterEntity" representedClassName="CharacterEntity" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ComicEntity" representedClassName="ComicEntity" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="EventEntity" representedClassName="EventEntity" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SeriesEntity" representedClassName="SeriesEntity" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+    </entity>
+</model>

@@ -113,7 +113,6 @@ final class ComicDetailsVC: UIViewController {
     private lazy var descriptionTitleLabel: UILabel = getTitleLabel(title: "About")
     private lazy var descriptionLabel: UILabel = getSubTitleLabel()
     
-    private lazy var pricesTitleLabel: UILabel = getTitleLabel(title: "Prices")
     private lazy var printPriceTitleLabel: UILabel = getSubTitleLabel(title: "Print Price")
     private lazy var digitalCopyPriceTitleLabel: UILabel = getSubTitleLabel(title: "Digital Copy")
     private lazy var printPriceLabel: UILabel = getPriceLabel()
@@ -209,7 +208,6 @@ final class ComicDetailsVC: UIViewController {
         scrollView.addSubview(datesSeparator)
         scrollView.addSubview(descriptionTitleLabel)
         scrollView.addSubview(descriptionLabel)
-        scrollView.addSubview(pricesTitleLabel)
         scrollView.addSubview(printPriceTitleLabel)
         scrollView.addSubview(printPriceLabel)
         scrollView.addSubview(digitalCopyPriceTitleLabel)
@@ -333,28 +331,24 @@ final class ComicDetailsVC: UIViewController {
             datesSeparator.widthAnchor.constraint(equalToConstant: 2),
             datesSeparator.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
-            pricesTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),
-            pricesTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            printPriceTitleLabel.topAnchor.constraint(equalTo: pricesTitleLabel.bottomAnchor, constant: 5),
-            printPriceTitleLabel.leadingAnchor.constraint(equalTo: pricesTitleLabel.leadingAnchor),
-            printPriceLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.topAnchor),
-            printPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceLabel.leadingAnchor),
-            
-            digitalCopyPriceTitleLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.bottomAnchor, constant: 5),
-            digitalCopyPriceTitleLabel.leadingAnchor.constraint(equalTo: pricesTitleLabel.leadingAnchor),
-            digitalCopyPriceLabel.topAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.topAnchor),
-            digitalCopyPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.trailingAnchor, constant: 10),
-            
-            descriptionTitleLabel.topAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.bottomAnchor, constant: 50),
+            descriptionTitleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 50),
             descriptionTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            descriptionTitleLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: descriptionTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor),
             
-            detailsButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
+            printPriceTitleLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15),
+            printPriceTitleLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            printPriceLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.topAnchor),
+            printPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceLabel.leadingAnchor),
+            
+            digitalCopyPriceTitleLabel.topAnchor.constraint(equalTo: printPriceTitleLabel.bottomAnchor, constant: 5),
+            digitalCopyPriceTitleLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            digitalCopyPriceLabel.topAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.topAnchor),
+            digitalCopyPriceLabel.leadingAnchor.constraint(equalTo: digitalCopyPriceTitleLabel.trailingAnchor, constant: 10),
+            
+            detailsButton.topAnchor.constraint(equalTo: digitalCopyPriceLabel.bottomAnchor, constant: 50),
             detailsButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 15),
             detailsButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -25),
             detailsButton.heightAnchor.constraint(equalToConstant: 44),

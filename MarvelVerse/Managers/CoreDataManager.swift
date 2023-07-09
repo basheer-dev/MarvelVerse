@@ -71,20 +71,28 @@ class CoreDataManager {
     func saveObject(type: Entity, id: Int) {
         switch type {
         case .Series:
-            let objectToSave = SavedSeries(context: context)
-            objectToSave.id = Int64(id)
+            if getSavedSeries().contains(where: { $0.id == id }) == false {
+                let objectToSave = SavedSeries(context: context)
+                objectToSave.id = Int64(id)
+            }
             
         case .Event:
-            let objectToSave = SavedEvent(context: context)
-            objectToSave.id = Int64(id)
+            if getSavedEvents().contains(where: { $0.id == id }) == false {
+                let objectToSave = SavedEvent(context: context)
+                objectToSave.id = Int64(id)
+            }
             
         case .Character:
-            let objectToSave = SavedCharacter(context: context)
-            objectToSave.id = Int64(id)
+            if getSavedCharacters().contains(where: { $0.id == id }) == false {
+                let objectToSave = SavedCharacter(context: context)
+                objectToSave.id = Int64(id)
+            }
             
         default:
-            let objectToSave = SavedComic(context: context)
-            objectToSave.id = Int64(id)
+            if getSavedComics().contains(where: { $0.id == id }) == false {
+                let objectToSave = SavedComic(context: context)
+                objectToSave.id = Int64(id)
+            }
         }
         
         saveContext()

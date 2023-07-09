@@ -11,6 +11,7 @@ import UIKit
 final class ComicsVC: UIViewController {
     
     private var comics: [Comic] = []
+    private var savedComics: [SavedComic] = []
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
@@ -34,6 +35,7 @@ final class ComicsVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         fetchData(title: searchTitle)
+        getStoredData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -51,6 +53,11 @@ final class ComicsVC: UIViewController {
         activityIndicator.color = .systemRed
         
         return activityIndicator
+    }
+    
+    // MARK: - COREDATA
+    private func getStoredData() {
+        savedComics = CoreDataManager.shared.getSavedComics()
     }
     
     // MARK: - DATA
@@ -102,6 +109,24 @@ final class ComicsVC: UIViewController {
 }
 
 
+// MARK: - SAVE BUTTON EXT
+extension ComicsVC: SaveButtonDelegate {
+    func didTapSaveButton(row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
+        getStoredData()
+        cell.didTapSave()
+    }
+}
+
+
+// MARK: - CELL SAVE BUTTON EXT
+extension ComicsVC: CellSaveButtonDelegate {
+    func didTapCellSaveButton() {
+        getStoredData()
+    }
+}
+
+
 // MARK: - APISEARCH EXT
 extension ComicsVC: APIDataSearch {
     
@@ -128,7 +153,8 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ComicCell.id, for: indexPath) as? ComicCell else { fatalError() }
-        cell.set(comic: comics[indexPath.row])
+        cell.set(comic: comics[indexPath.row], isSaved: savedComics.contains(where: { $0.id == comics[indexPath.row].id }))
+        cell.delegate = self
         
         /// Getting the thumbnail image
         cell.thumbNailImageView.image = .none
@@ -158,16 +184,14 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dest = ComicDetailsVC()
-        dest.set(comic: comics[indexPath.row])
+        dest.set(comic: comics[indexPath.row], rowID: indexPath.row, isSaved: savedComics.contains(where: { $0.id == comics[indexPath.row].id }))
+        dest.delegate = self
         
         navigationController?.pushViewController(dest, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == comics.count - 1 {
-            /// The user has reached the bottom
-            /// Get more data
-
             fetchData(title: searchTitle, offset: comics.count + globalOffset)
         }
     }

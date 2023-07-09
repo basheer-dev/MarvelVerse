@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol CellSaveButtonDelegate {
+    func didTapCellSaveButton()
+}
+
 final class ComicCell: UITableViewCell {
     static let id: String = "ComicContainer"
+    
+    private var comicID = Int()
+    var isSaved: Bool = false
+    
+    var delegate: CellSaveButtonDelegate?
     
     let thumbNailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -88,21 +97,38 @@ final class ComicCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(comic: Comic) {
+    func set(comic: Comic, isSaved: Bool = false) {
+        comicID = comic.id
+        
         titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
         pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
         thumbNailImageView.image = .none
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        }
     }
     
     // MARK: - ACTIONS
-    @objc private func saveButtonTapped() {
-        print("save")
+    @objc func didTapSave() {
+        isSaved.toggle()
+        
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Comic, id: comicID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Comic, id: comicID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapCellSaveButton()
     }
     
     // MARK: - SUBVIEWS
     private func configureSubviews() {
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
         
         addSubview(thumbNailImageView)
         addSubview(activityIndicator)

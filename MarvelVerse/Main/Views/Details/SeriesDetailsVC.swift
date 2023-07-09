@@ -7,7 +7,16 @@
 
 import UIKit
 
+protocol SeriesSaveButtonDelegate {
+    func didTapSaveButton(row: Int)
+}
+
 final class SeriesDetailsVC: UIViewController {
+    private var seriesID = Int()
+    private var isSaved: Bool = false
+    private var rowID: Int = 0
+    
+    var delegate: SeriesSaveButtonDelegate?
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -157,6 +166,8 @@ final class SeriesDetailsVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(typeLabel)
         scrollView.addSubview(saveButton)
@@ -180,7 +191,10 @@ final class SeriesDetailsVC: UIViewController {
         configureLayouts()
     }
     
-    func set(series: Series) {
+    func set(series: Series, rowID: Int, isSaved: Bool = false) {
+        seriesID = series.id
+        self.rowID = rowID
+        
         titleLabel.text = ModelTextManager.shared.getTitle(from: series.title)
         typeLabel.text = "Type | \(ModelTextManager.shared.getStringInfo(from: series.type))"
         ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
@@ -188,6 +202,11 @@ final class SeriesDetailsVC: UIViewController {
         endYearLabel.text = ModelDateManager.shared.getYear(from: series.endYear)
         modificationDateLabel.text = ModelDateManager.shared.getDate(from: series.modified)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        }
         
         ///Getting the series image
         ModelImageManager.shared.getImageData(for: series.thumbnail) {
@@ -205,6 +224,21 @@ final class SeriesDetailsVC: UIViewController {
             detailsButton.configuration?.baseForegroundColor = .systemGray
             detailsButton.isUserInteractionEnabled = false
         }
+    }
+    
+    // MARK: - ACTIONS
+    @objc private func didTapSave() {
+        isSaved.toggle()
+        
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Series, id: seriesID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Series, id: seriesID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapSaveButton(row: rowID)
     }
     
     // MARK: - LAYOUTS CONFIG

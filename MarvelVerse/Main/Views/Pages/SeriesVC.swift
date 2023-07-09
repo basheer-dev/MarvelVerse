@@ -10,6 +10,7 @@ import UIKit
 final class SeriesVC: UIViewController {
     
     private var allSeries: [Series] = []
+    private var savedSeries: [SavedSeries] = []
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
@@ -33,6 +34,7 @@ final class SeriesVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         fetchData(title: searchTitle)
+        getStoredData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -50,6 +52,11 @@ final class SeriesVC: UIViewController {
         activityIndicator.color = .systemRed
         
         return activityIndicator
+    }
+    
+    // MARK: - COREDATA
+    private func getStoredData() {
+        savedSeries = CoreDataManager.shared.getSavedSeries()
     }
     
     // MARK: - DATA
@@ -100,6 +107,23 @@ final class SeriesVC: UIViewController {
     }
 }
 
+// MARK: - SAVE BUTTON EXT
+extension SeriesVC: SeriesSaveButtonDelegate {
+    func didTapSaveButton(row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? SeriesCell else { return }
+        getStoredData()
+        cell.didTapSave()
+    }
+}
+
+
+// MARK: - CELL SAVE BUTTON EXT
+extension SeriesVC: SeriesCellSaveButtonDelegate {
+    func didTapCellSaveButton() {
+        getStoredData()
+    }
+}
+
 
 // MARK: - APISEARCH EXT
 extension SeriesVC: APIDataSearch {
@@ -126,7 +150,8 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SeriesCell.id, for: indexPath) as? SeriesCell else { fatalError() }
-        cell.set(series: allSeries[indexPath.row])
+        cell.set(series: allSeries[indexPath.row], isSaved: savedSeries.contains(where: { $0.id == allSeries[indexPath.row].id }))
+        cell.delegate = self
         
         /// Getting the thumbnail image
         cell.activityIndicator.startAnimating()
@@ -156,7 +181,8 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dest = SeriesDetailsVC()
-        dest.set(series: allSeries[indexPath.row])
+        dest.set(series: allSeries[indexPath.row], rowID: indexPath.row, isSaved: savedSeries.contains(where: { $0.id == allSeries[indexPath.row].id }))
+        dest.delegate = self
         
         navigationController?.pushViewController(dest, animated: true)
     }

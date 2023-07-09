@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol SeriesCellSaveButtonDelegate {
+    func didTapCellSaveButton()
+}
+
 final class SeriesCell: UITableViewCell {
     static let id = "SeriesContainer"
+    
+    private var seriesID = Int()
+    var isSaved: Bool = false
+    
+    var delegate: SeriesCellSaveButtonDelegate?
     
     let seriesImageView: UIImageView = {
         let imageView = UIImageView()
@@ -84,10 +93,17 @@ final class SeriesCell: UITableViewCell {
         configureSubviews()
     }
     
-    func set(series: Series) {
+    func set(series: Series, isSaved: Bool = false) {
+        seriesID = series.id
+        
         titleLabel.text = ModelTextManager.shared.getTitle(from: series.title)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
         ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        }
         
         /// Getting the series image
         ModelImageManager.shared.getImageData(for: series.thumbnail) {
@@ -102,8 +118,25 @@ final class SeriesCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - ACTIONS
+    @objc func didTapSave() {
+        isSaved.toggle()
+        
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Series, id: seriesID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Series, id: seriesID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapCellSaveButton()
+    }
+    
     // MARK: -  SUBVIEWS
     private func configureSubviews() {
+        saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        
         addSubview(seriesImageView)
         addSubview(activityIndicator)
         addSubview(saveButton)

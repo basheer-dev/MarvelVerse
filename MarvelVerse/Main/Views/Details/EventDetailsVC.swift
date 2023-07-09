@@ -7,7 +7,16 @@
 
 import UIKit
 
+protocol EventSaveButtonDelegate {
+    func didTapSaveButton(row: Int)
+}
+
 final class EventDetailsVC: UIViewController {
+    private var eventID = Int()
+    private var isSaved: Bool = false
+    private var rowID: Int = 0
+    
+    var delegate: EventSaveButtonDelegate?
     
     private var nextEvent: String = ""
     private var nextEventTitle: String = ""
@@ -153,6 +162,8 @@ final class EventDetailsVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(saveButton)
         scrollView.addSubview(eventImageView)
@@ -176,12 +187,20 @@ final class EventDetailsVC: UIViewController {
         configureLayouts()
     }
     
-    func set(event: Event) {
+    func set(event: Event, rowID: Int, isSaved: Bool = false) {
+        eventID = event.id
+        self.rowID = rowID
+        
         titleLabel.text = event.title
         startYearLabel.text = ModelDateManager.shared.getDate(from: event.start, getYearOnly: true)
         modificationDateLabel.text = ModelDateManager.shared.getDate(from: event.modified)
         endYearLabel.text = ModelDateManager.shared.getDate(from: event.end, getYearOnly: true)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        }
         
         /// Configuring the buttons
         nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
@@ -228,6 +247,20 @@ final class EventDetailsVC: UIViewController {
     }
     
     // MARK: - ACTIONS
+    @objc private func didTapSave() {
+        isSaved.toggle()
+        
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Event, id: eventID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Event, id: eventID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapSaveButton(row: rowID)
+    }
+    
     @objc private func didTapNext() {
         activityIndicator.startAnimating()
         
@@ -285,7 +318,7 @@ final class EventDetailsVC: UIViewController {
             if let APIEvent = APIData.data.results.first {
                 DispatchQueue.main.async {
                     [weak self] in
-                    self?.set(event: APIEvent)
+                    self?.set(event: APIEvent, rowID: 0)
                 }
             }
         }

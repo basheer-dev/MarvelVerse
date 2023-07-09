@@ -10,6 +10,7 @@ import UIKit
 final class EventsVC: UIViewController {
     
     private var events: [Event] = []
+    private var savedEvents: [SavedEvent] = []
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
@@ -33,6 +34,7 @@ final class EventsVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         fetchData(title: searchTitle)
+        getStoredData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -50,6 +52,11 @@ final class EventsVC: UIViewController {
         activityIndicator.color = .systemRed
         
         return activityIndicator
+    }
+    
+    // MARK: - COREDATA
+    private func getStoredData() {
+        savedEvents = CoreDataManager.shared.getSavedEvents()
     }
     
     // MARK: - DATA
@@ -101,6 +108,24 @@ final class EventsVC: UIViewController {
 }
 
 
+// MARK: - SAVE BUTTON EXT
+extension EventsVC: EventSaveButtonDelegate {
+    func didTapSaveButton(row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? EventCell else { return }
+        getStoredData()
+        cell.didTapSave()
+    }
+}
+
+
+// MARK: - CELL SAVE BUTTON EXT
+extension EventsVC: EventCellSaveButtonDelegate {
+    func didTapCellSaveButton() {
+        getStoredData()
+    }
+}
+
+
 // MARK: - APISEARCH EXT
 extension EventsVC: APIDataSearch {
     
@@ -127,7 +152,8 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.id, for: indexPath) as? EventCell else { fatalError() }
-        cell.set(event: events[indexPath.row])
+        cell.set(event: events[indexPath.row], isSaved: savedEvents.contains(where: { $0.id == events[indexPath.row].id }))
+        cell.delegate = self
         
         /// Getting the thumbnail image
         cell.activityIndicator.startAnimating()
@@ -157,7 +183,8 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dest = EventDetailsVC()
-        dest.set(event: events[indexPath.row])
+        dest.set(event: events[indexPath.row], rowID: indexPath.row, isSaved: savedEvents.contains(where: { $0.id == events[indexPath.row].id }))
+        dest.delegate = self
         
         navigationController?.pushViewController(dest, animated: true)
     }

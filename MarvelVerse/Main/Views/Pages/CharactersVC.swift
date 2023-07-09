@@ -10,6 +10,7 @@ import UIKit
 final class CharactersVC: UIViewController {
     
     private var characters: [Character] = []
+    private var savedCharacters: [SavedCharacter] = []
     private var thumbnails: [Int: Data] = [:]
     private var searchTitle: String = ""
     private var globalOffset: Int = 0
@@ -41,12 +42,18 @@ final class CharactersVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         fetchData(title: searchTitle)
+        getStoredData()
     }
     
     override func viewDidLayoutSubviews() {
         collectionView.frame = view.bounds
         
         view.addSubview(collectionView)
+    }
+    
+    // MARK: - COREDATA
+    private func getStoredData() {
+        savedCharacters = CoreDataManager.shared.getSavedCharacters()
     }
     
     // MARK: - DATA
@@ -93,6 +100,13 @@ final class CharactersVC: UIViewController {
                 }
             }
         }
+    }
+}
+
+// MARK: - SAVE BUTTON EXT
+extension CharactersVC: CharacterSaveButtonDelegate {
+    func didTapSaveButton() {
+        getStoredData()
     }
 }
 
@@ -155,7 +169,8 @@ extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let dest = CharacterDetailsVC()
-        dest.set(character: characters[indexPath.row])
+        dest.set(character: characters[indexPath.row], isSaved: savedCharacters.contains(where: { $0.id == characters[indexPath.item].id }))
+        dest.delegate = self
         
         navigationController?.pushViewController(dest, animated: true)
     }

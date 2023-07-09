@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol SaveButtonDelegate {
+    func didTapSaveButton(row: Int)
+}
+
 final class ComicDetailsVC: UIViewController {
     private var comicImages: [APIImage] = []
+    private var comicID = Int()
+    private var isSaved: Bool = false
+    private var rowID: Int = 0
+    
+    var delegate: SaveButtonDelegate?
     
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -186,6 +195,8 @@ final class ComicDetailsVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(formatLabel)
         scrollView.addSubview(saveButton)
@@ -211,7 +222,10 @@ final class ComicDetailsVC: UIViewController {
         configureLayouts()
     }
     
-    func set(comic: Comic) {
+    func set(comic: Comic, rowID: Int, isSaved: Bool = false) {
+        comicID = comic.id
+        self.rowID = rowID
+        
         titleLabel.text = ModelTextManager.shared.getTitle(from: comic.title)
         formatLabel.text = "Format | \(comic.format ?? "Not specified")"
         pagesCountLabel.text = "Pages | \(comic.pageCount ?? 0)"
@@ -220,6 +234,11 @@ final class ComicDetailsVC: UIViewController {
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
         printPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isPrintPrice: true)
         digitalCopyPriceLabel.text = ModelTextManager.shared.getPrice(from: comic.prices, isDigitalCopyPrice: true)
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        }
         
         
         if printPriceLabel.text == "N/A" {
@@ -256,10 +275,20 @@ final class ComicDetailsVC: UIViewController {
     
     // MARK: - ACTIONS
     @objc private func didTapSave() {
+        isSaved.toggle()
         
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Comic, id: comicID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Comic, id: comicID)
+            saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapSaveButton(row: rowID)
     }
     
-    // MARK: LAYOUT CONFIG
+    // MARK: - LAYOUT CONFIG
     private func configureLayouts() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

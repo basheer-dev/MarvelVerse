@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol CharacterSaveButtonDelegate {
+    func didTapSaveButton()
+}
+
 final class CharacterDetailsVC: UIViewController {
+    private var characterID = Int()
+    private var isSaved: Bool = false
+    
+    var delegate: CharacterSaveButtonDelegate?
     
     private var scrollView: UIView = {
         let scroll = UIScrollView()
@@ -16,17 +24,6 @@ final class CharacterDetailsVC: UIViewController {
         scroll.showsVerticalScrollIndicator = false
                 
         return scroll
-    }()
-    
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.configuration = .plain()
-        button.configuration?.image = UIImage(systemName: "bookmark")
-        button.configuration?.baseForegroundColor = .systemRed
-        
-        return button
     }()
     
     private let nameLabel: UILabel = {
@@ -149,13 +146,15 @@ final class CharacterDetailsVC: UIViewController {
     private var detailsURLString: String = ""
     private var comicsURLString: String = ""
     
+    private lazy var saveButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(didTapSave))
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(didTapSave))
+        navigationItem.rightBarButtonItem = saveButton
     }
     
     override func viewDidLayoutSubviews() {
@@ -181,11 +180,18 @@ final class CharacterDetailsVC: UIViewController {
         configureLayouts()
     }
     
-    func set(character: Character) {
+    func set(character: Character, isSaved: Bool = false) {
+        characterID = character.id
+        
         nameLabel.text = character.name
         idLabel.text = "CharacterID | \(character.id)"
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: character.description)
         modificationLabel.text = ModelDateManager.shared.getDate(from: character.modified)
+        
+        if isSaved == true {
+            self.isSaved = true
+            saveButton.image = UIImage(systemName: "bookmark.fill")
+        }
         
         /// Counts
         comicsCountLabel.text = "0"
@@ -228,7 +234,17 @@ final class CharacterDetailsVC: UIViewController {
     
     // MARK: - ACTIONS
     @objc private func didTapSave() {
+        isSaved.toggle()
         
+        if isSaved == true {
+            CoreDataManager.shared.saveObject(type: .Character, id: characterID)
+            saveButton.image = UIImage(systemName: "bookmark.fill")
+        } else {
+            CoreDataManager.shared.deleteObject(type: .Character, id: characterID)
+            saveButton.image = UIImage(systemName: "bookmark")
+        }
+        
+        delegate?.didTapSaveButton()
     }
     
     // MARK: - LAYOUTS CONFIG

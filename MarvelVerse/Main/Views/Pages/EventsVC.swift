@@ -109,19 +109,15 @@ final class EventsVC: UIViewController {
 
 
 // MARK: - SAVE BUTTON EXT
-extension EventsVC: EventSaveButtonDelegate {
-    func didTapSaveButton(row: Int) {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? EventCell else { return }
+extension EventsVC: SaveButtonDelegate {
+    
+    func didTapSaveButton(row: Int?, comicID: Int?) {
         getStoredData()
-        cell.didTapSave()
-    }
-}
-
-
-// MARK: - CELL SAVE BUTTON EXT
-extension EventsVC: EventCellSaveButtonDelegate {
-    func didTapCellSaveButton() {
-        getStoredData()
+        
+        if let row = row {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? EventCell else { return }
+            cell.didTapSave()
+        }
     }
 }
 

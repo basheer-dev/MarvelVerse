@@ -1,19 +1,22 @@
 //
-//  ComicsVC.swift
+//  SavedComicsVC.swift
 //  MarvelVerse
 //
-//  Created by Basheer Abdulmalik on 01/07/2023.
+//  Created by Basheer Abdulmalik on 10/07/2023.
 //
 
 import UIKit
 
+protocol SaveButtonConnectDelegate {
+    func connect(id: Int)
+}
 
-final class ComicsVC: UIViewController {
+final class SavedComicsVC: UIViewController {
     private var comics: [Comic] = []
     private var savedComics: [SavedComic] = []
     private var thumbnails: [Int: Data] = [:]
-    private var searchTitle: String = ""
-    private var globalOffset: Int = 0
+    
+    var delegate: SaveButtonConnectDelegate?
             
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -33,8 +36,8 @@ final class ComicsVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        fetchData(title: searchTitle)
         getStoredData()
+        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,25 +63,19 @@ final class ComicsVC: UIViewController {
     }
     
     // MARK: - DATA
-    private func fetchData(title: String = "", offset: Int = 0) {
-        var urlString = "https://gateway.marvel.com:443/v1/public/comics"
-        urlString += URLManager.shared.getAPIUserKeyInfo() + "&orderBy=title"
-        
-        if offset > 0 {
-            urlString += "&offset=\(offset)&limit=20"
-        }
-        
-        if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
-        }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            [weak self] in
+    private func fetchData() {
+        for comic in savedComics {
+            var urlString = "https://gateway.marvel.com:443/v1/public/comics/\(comic.id)"
+            urlString += URLManager.shared.getAPIUserKeyInfo()
             
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    // Ok to parse
-                    self?.parseJSON(json: data)
+            DispatchQueue.global(qos: .userInteractive).async {
+                [weak self] in
+                
+                if let url = URL(string: urlString) {
+                    if let data = try? Data(contentsOf: url) {
+                        // Ok to parse
+                        self?.parseJSON(json: data)
+                    }
                 }
             }
         }
@@ -88,19 +85,14 @@ final class ComicsVC: UIViewController {
         let decoder = JSONDecoder()
         
         if let APIData = try? decoder.decode(Comics.self, from: json) {
-            let APIComics = APIData.data.results
-            
-            DispatchQueue.main.async {
-                [weak self] in
-                guard let self = self else { return }
+            if let APIComic = APIData.data.results.first {
                 
-                for comic in APIComics {
-                    if self.comics.contains(where: { $0.id == comic.id }) == false && comic.thumbnail?.path?.contains("/image_not_available") == false {
-                        self.comics.append(comic)
-                        self.tableView.insertRows(at: [IndexPath(row: self.comics.count - 1, section: 0)], with: .automatic)
-                    } else {
-                        globalOffset += 1
-                    }
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.comics.append(APIComic)
+                    self.tableView.insertRows(at: [IndexPath(row: self.comics.count - 1, section: 0)], with: .automatic)
                 }
             }
         }
@@ -109,53 +101,22 @@ final class ComicsVC: UIViewController {
 
 
 // MARK: - SAVE BUTTON EXT
-extension ComicsVC: SaveButtonDelegate, SaveButtonConnectDelegate {
-    
+extension SavedComicsVC: SaveButtonDelegate {
     func didTapSaveButton(row: Int?, comicID: Int?) {
-        refresh(row: row, comicID: nil)
-    }
-    
-    func connect(id: Int) {
-        refresh(row: nil, comicID: id)
-    }
-    
-    private func refresh(row: Int?, comicID: Int?) {
+        if let comicID = comicID {
+            delegate?.connect(id: comicID)
+        }
         getStoredData()
         
         if let row = row {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
             cell.didTapSave()
         }
-        
-        if let comicID = comicID {
-            if let row = comics.firstIndex(where: { $0.id == comicID }) {
-                guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
-                cell.didTapSave()
-            }
-        }
     }
 }
-
-
-// MARK: - APISEARCH EXT
-extension ComicsVC: APIDataSearch {
-    
-    func didSearchFor(title: String) {
-        clearData()
-        searchTitle = title
-        fetchData(title: searchTitle)
-    }
-    
-    private func clearData() {
-        thumbnails.removeAll()
-        comics.removeAll()
-        tableView.reloadData()
-    }
-}
-
 
 // MARK: - TABLEVIEW EXT
-extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
+extension SavedComicsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comics.count
@@ -198,11 +159,5 @@ extension ComicsVC: UITableViewDelegate, UITableViewDataSource {
         dest.delegate = self
         
         navigationController?.pushViewController(dest, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == comics.count - 1 {
-            fetchData(title: searchTitle, offset: comics.count + globalOffset)
-        }
     }
 }

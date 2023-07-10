@@ -13,6 +13,10 @@
 		3A0D7CA62A51B6270061E3A5 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7CA52A51B6270061E3A5 /* EventsVC.swift */; };
 		3A0D7CA92A51D4260061E3A5 /* ComicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7CA82A51D4260061E3A5 /* ComicCell.swift */; };
 		3A163D732A5BD422004DED11 /* DropDownMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */; };
+		3A163D762A5BE5A3004DED11 /* SavedComicsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D752A5BE5A3004DED11 /* SavedComicsVC.swift */; };
+		3A163D782A5BE5DC004DED11 /* SavedSeriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D772A5BE5DC004DED11 /* SavedSeriesVC.swift */; };
+		3A163D7A2A5BE5F3004DED11 /* SavedEventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D792A5BE5F3004DED11 /* SavedEventsVC.swift */; };
+		3A163D7C2A5BE61C004DED11 /* SavedCharactersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D7B2A5BE61C004DED11 /* SavedCharactersVC.swift */; };
 		3A3A1EBA2A570C1000B1441F /* ComicsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EB92A570C1000B1441F /* ComicsVC.swift */; };
 		3A3A1EBC2A572CC000B1441F /* ModelTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EBB2A572CC000B1441F /* ModelTextManager.swift */; };
 		3A3A1EBE2A572D5800B1441F /* ModelDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EBD2A572D5800B1441F /* ModelDateManager.swift */; };
@@ -55,6 +59,10 @@
 		3A0D7CA52A51B6270061E3A5 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
 		3A0D7CA82A51D4260061E3A5 /* ComicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicCell.swift; sourceTree = "<group>"; };
 		3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenuVC.swift; sourceTree = "<group>"; };
+		3A163D752A5BE5A3004DED11 /* SavedComicsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedComicsVC.swift; sourceTree = "<group>"; };
+		3A163D772A5BE5DC004DED11 /* SavedSeriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSeriesVC.swift; sourceTree = "<group>"; };
+		3A163D792A5BE5F3004DED11 /* SavedEventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedEventsVC.swift; sourceTree = "<group>"; };
+		3A163D7B2A5BE61C004DED11 /* SavedCharactersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCharactersVC.swift; sourceTree = "<group>"; };
 		3A3A1EB92A570C1000B1441F /* ComicsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicsVC.swift; sourceTree = "<group>"; };
 		3A3A1EBB2A572CC000B1441F /* ModelTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTextManager.swift; sourceTree = "<group>"; };
 		3A3A1EBD2A572D5800B1441F /* ModelDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDateManager.swift; sourceTree = "<group>"; };
@@ -106,8 +114,8 @@
 		3A08C7372A501DA50085131B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3A163D742A5BE581004DED11 /* Saved */,
 				3AC40C922A532175001A97EB /* Pages */,
-				3AC40C932A53217C001A97EB /* Details */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -122,6 +130,17 @@
 				3ACED5822A591D3D00EF12BE /* EventCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		3A163D742A5BE581004DED11 /* Saved */ = {
+			isa = PBXGroup;
+			children = (
+				3A163D752A5BE5A3004DED11 /* SavedComicsVC.swift */,
+				3A163D772A5BE5DC004DED11 /* SavedSeriesVC.swift */,
+				3A163D792A5BE5F3004DED11 /* SavedEventsVC.swift */,
+				3A163D7B2A5BE61C004DED11 /* SavedCharactersVC.swift */,
+			);
+			path = Saved;
 			sourceTree = "<group>";
 		};
 		3A6FA4022A4F1C2C001C104E = {
@@ -177,10 +196,10 @@
 			isa = PBXGroup;
 			children = (
 				3A08C7352A501D800085131B /* MainVC.swift */,
+				3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */,
 				3A08C7372A501DA50085131B /* Views */,
 				3A0D7CA72A51D40F0061E3A5 /* Cells */,
 				3AC40C892A52C415001A97EB /* Objects */,
-				3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -204,6 +223,7 @@
 				3A0D7CA12A5151600061E3A5 /* CharactersVC.swift */,
 				3A0D7CA32A51B5FF0061E3A5 /* SeriesVC.swift */,
 				3A0D7CA52A51B6270061E3A5 /* EventsVC.swift */,
+				3AC40C932A53217C001A97EB /* Details */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -319,13 +339,16 @@
 				3A0D7CA22A5151600061E3A5 /* CharactersVC.swift in Sources */,
 				3ACED5852A591E8600EF12BE /* EventDetailsVC.swift in Sources */,
 				3A3A1EBC2A572CC000B1441F /* ModelTextManager.swift in Sources */,
+				3A163D7C2A5BE61C004DED11 /* SavedCharactersVC.swift in Sources */,
 				3AE0BA8E2A5AF4890074E79C /* SavedComic+CoreDataProperties.swift in Sources */,
 				3A0D7CA42A51B5FF0061E3A5 /* SeriesVC.swift in Sources */,
 				3AE0BA892A5AF4890074E79C /* SavedEvent+CoreDataClass.swift in Sources */,
 				3AE0BA902A5B02140074E79C /* CoreDataManager.swift in Sources */,
 				3AE0BA8B2A5AF4890074E79C /* SavedCharacter+CoreDataClass.swift in Sources */,
+				3A163D762A5BE5A3004DED11 /* SavedComicsVC.swift in Sources */,
 				3AB85B972A57D5980099471B /* CharacterCell.swift in Sources */,
 				3ACED5812A59177F00EF12BE /* Events.swift in Sources */,
+				3A163D782A5BE5DC004DED11 /* SavedSeriesVC.swift in Sources */,
 				3AE0BA3D2A5AECDD0074E79C /* MarvelVerse.xcdatamodeld in Sources */,
 				3A3A1EBE2A572D5800B1441F /* ModelDateManager.swift in Sources */,
 				3A163D732A5BD422004DED11 /* DropDownMenuVC.swift in Sources */,
@@ -351,6 +374,7 @@
 				3AE0BA8D2A5AF4890074E79C /* SavedComic+CoreDataClass.swift in Sources */,
 				3A3A1EC02A572DBE00B1441F /* ModelImageManager.swift in Sources */,
 				3AD680A02A4FF2090080D6DD /* APIConfig.swift in Sources */,
+				3A163D7A2A5BE5F3004DED11 /* SavedEventsVC.swift in Sources */,
 				3AE0BA8A2A5AF4890074E79C /* SavedEvent+CoreDataProperties.swift in Sources */,
 				3A6FA4112A4F1C2C001C104E /* SceneDelegate.swift in Sources */,
 			);

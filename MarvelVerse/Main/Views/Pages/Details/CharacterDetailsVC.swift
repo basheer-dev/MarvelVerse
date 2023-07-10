@@ -7,15 +7,12 @@
 
 import UIKit
 
-protocol CharacterSaveButtonDelegate {
-    func didTapSaveButton()
-}
 
 final class CharacterDetailsVC: UIViewController {
     private var characterID = Int()
     private var isSaved: Bool = false
     
-    var delegate: CharacterSaveButtonDelegate?
+    var delegate: SaveButtonDelegate?
     
     private var scrollView: UIView = {
         let scroll = UIScrollView()
@@ -244,7 +241,7 @@ final class CharacterDetailsVC: UIViewController {
             saveButton.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton()
+        delegate?.didTapSaveButton(row: nil, comicID: nil)
     }
     
     // MARK: - LAYOUTS CONFIG

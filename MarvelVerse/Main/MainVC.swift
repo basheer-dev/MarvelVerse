@@ -14,8 +14,11 @@ protocol APIDataSearch {
 final class MainVC: UIViewController {
     var delegate: APIDataSearch?
     
+    private let comicsVC: UIViewController = ComicsVC()
+    private let seriesVC: UIViewController = SeriesVC()
+    private let eventsVC: UIViewController = EventsVC()
+    
     private var pageContentView: UIView?
-    private let comicsVC = ComicsVC()
     private var isDropDownMenuActive: Bool = false
     private var isSideMenuActive: Bool = false
     
@@ -91,8 +94,8 @@ final class MainVC: UIViewController {
     }
     
     private func configureSubviews() {
-        let comicsVC = ComicsVC()
-        delegate = comicsVC
+//        let comicsVC = ComicsVC()
+        delegate = self.comicsVC as? any APIDataSearch
         
         addChild(comicsVC)
         view.addSubview(comicsVC.view)
@@ -144,6 +147,8 @@ final class MainVC: UIViewController {
     
     @objc func toggleDropDownMenu(_ sender: UIBarButtonItem) {
         let dest = DropDownMenuVC()
+        dest.delegate = self
+        
         dest.modalPresentationStyle = .popover
         Page.allCases.forEach {
             page in
@@ -156,10 +161,6 @@ final class MainVC: UIViewController {
         dest.popoverPresentationController?.delegate = self
         
         present(dest, animated: true, completion: nil)
-    }
-    
-    @objc private func dropDownMenuButtonTapped() {
-        print("tapped")
     }
 }
 
@@ -174,7 +175,25 @@ extension MainVC: UIPopoverPresentationControllerDelegate{
 // MARK: - DROP DOWN MENU EXT
 extension MainVC: DropDownMenuDelegate {
     func didTapMenuItem(named name: String) {
-        //
+        switch name {
+        case Page.series.rawValue:
+            let dest = SavedSeriesVC()
+//            dest.MainSeriesVC = seriesVC
+            
+            navigationController?.pushViewController(dest, animated: true)
+            
+        case Page.Events.rawValue:
+            let dest = SavedEventsVC()
+//            dest.MainEventsVC = eventsVC
+            
+            navigationController?.pushViewController(dest, animated: true)
+            
+        default:
+            let dest = SavedComicsVC()
+            dest.delegate = comicsVC as? any SaveButtonConnectDelegate
+            
+            navigationController?.pushViewController(dest, animated: true)
+        }
     }
 }
 
@@ -242,16 +261,16 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         switch title {
         case Page.series.rawValue:
             row = 1
-            dest = SeriesVC()
+            dest = seriesVC
         case Page.characters.rawValue:
             row = 3
             dest = CharactersVC()
         case Page.Events.rawValue:
             row = 2
-            dest = EventsVC()
+            dest = eventsVC
         default:
             row = 0
-            dest = ComicsVC()
+            dest = comicsVC
         }
         
         delegate = dest as? any APIDataSearch

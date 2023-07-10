@@ -108,19 +108,15 @@ final class SeriesVC: UIViewController {
 }
 
 // MARK: - SAVE BUTTON EXT
-extension SeriesVC: SeriesSaveButtonDelegate {
-    func didTapSaveButton(row: Int) {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? SeriesCell else { return }
+extension SeriesVC: SaveButtonDelegate {
+    
+    func didTapSaveButton(row: Int?, comicID: Int?) {
         getStoredData()
-        cell.didTapSave()
-    }
-}
-
-
-// MARK: - CELL SAVE BUTTON EXT
-extension SeriesVC: SeriesCellSaveButtonDelegate {
-    func didTapCellSaveButton() {
-        getStoredData()
+        
+        if let row = row {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? SeriesCell else { return }
+            cell.didTapSave()
+        }
     }
 }
 

@@ -7,17 +7,13 @@
 
 import UIKit
 
-protocol SeriesCellSaveButtonDelegate {
-    func didTapCellSaveButton()
-}
-
 final class SeriesCell: UITableViewCell {
     static let id = "SeriesContainer"
     
     private var seriesID = Int()
     var isSaved: Bool = false
     
-    var delegate: SeriesCellSaveButtonDelegate?
+    var delegate: SaveButtonDelegate?
     
     let seriesImageView: UIImageView = {
         let imageView = UIImageView()
@@ -130,7 +126,7 @@ final class SeriesCell: UITableViewCell {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapCellSaveButton()
+        delegate?.didTapSaveButton(row: nil, comicID: nil)
     }
     
     // MARK: -  SUBVIEWS

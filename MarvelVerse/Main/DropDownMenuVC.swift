@@ -28,10 +28,9 @@ class DropDownMenuVC: UIViewController {
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .systemBackground
         
         self.tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -69,6 +68,7 @@ extension DropDownMenuVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: false)
         delegate?.didTapMenuItem(named: items[indexPath.row])
     }
 }

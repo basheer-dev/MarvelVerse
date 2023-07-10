@@ -7,9 +7,6 @@
 
 import UIKit
 
-protocol EventCellSaveButtonDelegate {
-    func didTapCellSaveButton()
-}
 
 final class EventCell: UITableViewCell {
     static let id: String = "EventContainer"
@@ -17,7 +14,7 @@ final class EventCell: UITableViewCell {
     private var eventID = Int()
     var isSaved: Bool = false
     
-    var delegate: EventCellSaveButtonDelegate?
+    var delegate: SaveButtonDelegate?
     
     let thumbNailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -122,7 +119,7 @@ final class EventCell: UITableViewCell {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapCellSaveButton()
+        delegate?.didTapSaveButton(row: nil, comicID: nil)
     }
     
     // MARK: - SUBVIEWS

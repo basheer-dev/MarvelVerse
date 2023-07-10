@@ -104,8 +104,8 @@ final class CharactersVC: UIViewController {
 }
 
 // MARK: - SAVE BUTTON EXT
-extension CharactersVC: CharacterSaveButtonDelegate {
-    func didTapSaveButton() {
+extension CharactersVC: SaveButtonDelegate {
+    func didTapSaveButton(row: Int?, comicID: Int?) {
         getStoredData()
     }
 }

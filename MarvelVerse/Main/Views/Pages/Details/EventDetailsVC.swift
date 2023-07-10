@@ -7,16 +7,14 @@
 
 import UIKit
 
-protocol EventSaveButtonDelegate {
-    func didTapSaveButton(row: Int)
-}
 
 final class EventDetailsVC: UIViewController {
     private var eventID = Int()
     private var isSaved: Bool = false
     private var rowID: Int = 0
     
-    var delegate: EventSaveButtonDelegate?
+    var delegate: SaveButtonDelegate?
+    var savedEventDetailsDelegate: SaveButtonDelegate?
     
     private var nextEvent: String = ""
     private var nextEventTitle: String = ""
@@ -258,7 +256,8 @@ final class EventDetailsVC: UIViewController {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: rowID)
+        delegate?.didTapSaveButton(row: rowID, comicID: nil)
+        savedEventDetailsDelegate?.didTapSaveButton(row: rowID, comicID: nil)
     }
     
     @objc private func didTapNext() {

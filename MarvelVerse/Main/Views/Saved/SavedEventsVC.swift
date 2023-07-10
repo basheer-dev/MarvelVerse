@@ -15,6 +15,12 @@ final class SavedEventsVC: UIViewController {
     
     var delegate: SaveButtonConnectDelegate?
     
+    enum TableViewFooterState {
+        case loading
+        case done
+        case empty
+    }
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         
@@ -28,23 +34,7 @@ final class SavedEventsVC: UIViewController {
         return tableView
     }()
     
-    // MARK: - VLD
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        
-        getStoredData()
-        fetchData()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        tableView.frame = view.bounds
-        tableView.tableFooterView = createTableViewFooter()
-        
-        view.addSubview(tableView)
-    }
-    
-    private func createTableViewFooter() -> UIView {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         
         activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
@@ -52,6 +42,60 @@ final class SavedEventsVC: UIViewController {
         activityIndicator.color = .systemRed
         
         return activityIndicator
+    }()
+    
+    private lazy var doneImageView: UIImageView = {
+        let view = UIImageView()
+        
+        view.image = UIImage(systemName: "checkmark.circle")
+        view.tintColor = .systemRed
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 25)
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
+    
+    private lazy var emptyImageView: UIImageView = {
+        let view = UIImageView()
+        
+        view.image = UIImage(systemName: "bookmark.slash")
+        view.tintColor = .systemRed
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 25)
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
+    
+    // MARK: - VLD
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        
+        getStoredData()
+        fetchData()
+        configureSubviews()
+    }
+    
+    func configureSubviews() {
+        tableView.frame = view.bounds
+        tableView.tableFooterView = createTableViewFooter(state: .loading)
+        
+        if savedEvents.isEmpty {
+            tableView.tableFooterView = createTableViewFooter(state: .empty)
+        }
+        
+        view.addSubview(tableView)
+    }
+    
+    private func createTableViewFooter(state: TableViewFooterState) -> UIView {
+        switch state {
+        case .done:
+            return doneImageView
+        case .empty:
+            return emptyImageView
+        default:
+            return activityIndicator
+        }
     }
     
     // MARK: - COREDATA
@@ -90,6 +134,10 @@ final class SavedEventsVC: UIViewController {
                     
                     self.events.append(APIEvent)
                     self.tableView.insertRows(at: [IndexPath(row: self.events.count - 1, section: 0)], with: .automatic)
+                    
+                    if APIEvent.id == self.savedEvents.last?.id ?? 0 {
+                        self.tableView.tableFooterView = createTableViewFooter(state: .done)
+                    }
                 }
             }
         }

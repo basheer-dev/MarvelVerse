@@ -96,9 +96,10 @@ final class SeriesCell: UITableViewCell {
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: series.description)
         ratingLabel.text = "Rating | \(ModelTextManager.shared.getStringInfo(from: series.rating))"
         
+        saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        
         if isSaved == true {
-            self.isSaved = true
-            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+            didTapSave()
         }
         
         /// Getting the series image

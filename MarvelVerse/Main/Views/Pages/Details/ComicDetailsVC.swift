@@ -192,6 +192,8 @@ final class ComicDetailsVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        detailsButton.addTarget(self, action: #selector(didTapDetails), for: .touchUpInside)
+        purchaseButton.addTarget(self, action: #selector(didTapPurchase), for: .touchUpInside)
         
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(formatLabel)
@@ -282,6 +284,20 @@ final class ComicDetailsVC: UIViewController {
         
         delegate?.didTapSaveButton(row: rowID, itemID: nil)
         savedComicDetailsDelegate?.didTapSaveButton(row: rowID, itemID: nil)
+    }
+    
+    @objc private func didTapDetails() {
+        let dest = WebVC()
+        dest.set(urlString: detailsURLString)
+        
+        present(dest, animated: true)
+    }
+    
+    @objc private func didTapPurchase() {
+        let dest = WebVC()
+        dest.set(urlString: purchaseURLString)
+        
+        present(dest, animated: true)
     }
     
     // MARK: - LAYOUT CONFIG

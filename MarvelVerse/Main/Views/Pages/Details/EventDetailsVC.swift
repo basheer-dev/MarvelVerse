@@ -161,6 +161,7 @@ final class EventDetailsVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        detailsButton.addTarget(self, action: #selector(didTapDetails), for: .touchUpInside)
         
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(saveButton)
@@ -321,6 +322,13 @@ final class EventDetailsVC: UIViewController {
                 }
             }
         }
+    }
+    
+    @objc private func didTapDetails() {
+        let dest = WebVC()
+        dest.set(urlString: detailsURLString)
+        
+        present(dest, animated: true)
     }
     
     // MARK: - LAYOUTS CONFIG

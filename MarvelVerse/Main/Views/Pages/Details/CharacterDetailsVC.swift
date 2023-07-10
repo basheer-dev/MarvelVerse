@@ -155,6 +155,9 @@ final class CharacterDetailsVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        detailsButton.addTarget(self, action: #selector(didTapDetails), for: .touchUpInside)
+        comicsButton.addTarget(self, action: #selector(didTapComics), for: .touchUpInside)
+        
         scrollView.addSubview(thumbnailImageView)
         scrollView.addSubview(activityIndicator)
         scrollView.addSubview(nameLabel)
@@ -223,7 +226,7 @@ final class CharacterDetailsVC: UIViewController {
             detailsButton.isUserInteractionEnabled = false
         }
         
-        if comicsURLString.isEmpty {
+        if comicsURLString.isEmpty || character.comics?.available == 0 {
             comicsButton.configuration?.baseForegroundColor = .systemGray
             comicsButton.isUserInteractionEnabled = false
         }
@@ -242,6 +245,20 @@ final class CharacterDetailsVC: UIViewController {
         }
         
         delegate?.didTapSaveButton(row: nil, itemID: nil)
+    }
+    
+    @objc private func didTapDetails() {
+        let dest = WebVC()
+        dest.set(urlString: detailsURLString)
+        
+        present(dest, animated: true)
+    }
+    
+    @objc private func didTapComics() {
+        let dest = WebVC()
+        dest.set(urlString: comicsURLString)
+        
+        present(dest, animated: true)
     }
     
     // MARK: - LAYOUTS CONFIG

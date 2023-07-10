@@ -165,6 +165,7 @@ final class SeriesDetailsVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         saveButton.addTarget(self, action: #selector(didTapSave), for: .touchUpInside)
+        detailsButton.addTarget(self, action: #selector(didTapDetails), for: .touchUpInside)
         
         scrollView.addSubview(titleLabel)
         scrollView.addSubview(typeLabel)
@@ -238,6 +239,13 @@ final class SeriesDetailsVC: UIViewController {
         
         delegate?.didTapSaveButton(row: rowID, itemID: nil)
         savedSeriesDetailsDelegate?.didTapSaveButton(row: rowID, itemID: nil)
+    }
+    
+    @objc private func didTapDetails() {
+        let dest = WebVC()
+        dest.set(urlString: detailsURLString)
+        
+        present(dest, animated: true)
     }
     
     // MARK: - LAYOUTS CONFIG

@@ -19,6 +19,12 @@ final class SavedComicsVC: UIViewController {
     private var thumbnails: [Int: Data] = [:]
     
     var delegate: SaveButtonConnectDelegate?
+    
+    enum TableViewFooterState {
+        case loading
+        case done
+        case empty
+    }
             
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -33,23 +39,7 @@ final class SavedComicsVC: UIViewController {
         return tableView
     }()
     
-    // MARK: - VDL
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        
-        getStoredData()
-        fetchData()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        tableView.frame = view.bounds
-        tableView.tableFooterView = createTableViewFooter()
-        
-        view.addSubview(tableView)
-    }
-    
-    private func createTableViewFooter() -> UIView {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         
         activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 150)
@@ -57,6 +47,60 @@ final class SavedComicsVC: UIViewController {
         activityIndicator.color = .systemRed
         
         return activityIndicator
+    }()
+    
+    private lazy var doneImageView: UIImageView = {
+        let view = UIImageView()
+        
+        view.image = UIImage(systemName: "checkmark.circle")
+        view.tintColor = .systemRed
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 25)
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
+    
+    private lazy var emptyImageView: UIImageView = {
+        let view = UIImageView()
+        
+        view.image = UIImage(systemName: "bookmark.slash")
+        view.tintColor = .systemRed
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 25)
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
+    
+    // MARK: - VDL
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        
+        getStoredData()
+        fetchData()
+        configureSubviews()
+    }
+    
+    func configureSubviews() {
+        tableView.frame = view.bounds
+        tableView.tableFooterView = createTableViewFooter(state: .loading)
+        
+        if savedComics.isEmpty {
+            tableView.tableFooterView = createTableViewFooter(state: .empty)
+        }
+        
+        view.addSubview(tableView)
+    }
+    
+    private func createTableViewFooter(state: TableViewFooterState) -> UIView {
+        switch state {
+        case .done:
+            return doneImageView
+        case .empty:
+            return emptyImageView
+        default:
+            return activityIndicator
+        }
     }
     
     // MARK: - COREDATA
@@ -95,6 +139,10 @@ final class SavedComicsVC: UIViewController {
                     
                     self.comics.append(APIComic)
                     self.tableView.insertRows(at: [IndexPath(row: self.comics.count - 1, section: 0)], with: .automatic)
+                    
+                    if APIComic.id == self.savedComics.last?.id ?? 0 {
+                        self.tableView.tableFooterView = createTableViewFooter(state: .done)
+                    }
                 }
             }
         }

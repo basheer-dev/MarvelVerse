@@ -34,6 +34,29 @@ final class SavedCharactersVC: UIViewController {
         return collectionView
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = .systemRed
+        
+        return activityIndicator
+    }()
+    
+    private lazy var emptyImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        
+        view.image = UIImage(systemName: "bookmark.slash")
+        view.tintColor = .systemRed
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
+    
     // MARK: - VLD
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +70,28 @@ final class SavedCharactersVC: UIViewController {
         collectionView.frame = view.bounds
         
         view.addSubview(collectionView)
+        view.addSubview(activityIndicator)
+        view.addSubview(emptyImageView)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyImageView.widthAnchor.constraint(equalToConstant: 30),
+            emptyImageView.heightAnchor.constraint(equalToConstant: 30)
+        ])
     }
     
     // MARK: - COREDATA
     private func getStoredData() {
         savedCharacters = CoreDataManager.shared.getSavedCharacters()
+        
+        if savedCharacters.isEmpty {
+            activityIndicator.stopAnimating()
+            emptyImageView.isHidden = false
+        }
     }
     
     // MARK: - DATA
@@ -83,6 +123,7 @@ final class SavedCharactersVC: UIViewController {
                     [weak self] in
                     guard let self = self else { return }
                     
+                    self.activityIndicator.stopAnimating()
                     self.characters.append(APICharacter)
                     self.collectionView.insertItems(at: [IndexPath(item: self.characters.count - 1, section: 0)])
                 }

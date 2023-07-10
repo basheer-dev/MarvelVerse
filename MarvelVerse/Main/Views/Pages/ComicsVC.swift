@@ -128,6 +128,7 @@ extension ComicsVC: SaveButtonDelegate, SaveButtonConnectDelegate {
         
         if let comicID = comicID {
             if let row = comics.firstIndex(where: { $0.id == comicID }) {
+                print(CoreDataManager.shared.getSavedComics().count)
                 refreshCell(at: row)
             }
         }

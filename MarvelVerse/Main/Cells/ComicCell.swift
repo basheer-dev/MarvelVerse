@@ -107,9 +107,10 @@ final class ComicCell: UITableViewCell {
         thumbNailImageView.image = .none
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: comic.description)
         
+        saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        
         if isSaved == true {
-            self.isSaved = true
-            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+            didTapSave()
         }
     }
     

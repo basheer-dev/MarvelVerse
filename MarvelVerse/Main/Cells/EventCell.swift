@@ -101,9 +101,10 @@ final class EventCell: UITableViewCell {
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
         startYearLabel.text = ModelDateManager.shared.getDate(from: event.start, getYearOnly: true)
         
+        saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        
         if isSaved == true {
-            self.isSaved = true
-            saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
+            didTapSave()
         }
     }
     

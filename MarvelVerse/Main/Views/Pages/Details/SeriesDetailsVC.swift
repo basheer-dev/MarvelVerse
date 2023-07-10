@@ -236,8 +236,8 @@ final class SeriesDetailsVC: UIViewController {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: rowID, comicID: nil)
-        savedSeriesDetailsDelegate?.didTapSaveButton(row: rowID, comicID: nil)
+        delegate?.didTapSaveButton(row: rowID, itemID: nil)
+        savedSeriesDetailsDelegate?.didTapSaveButton(row: rowID, itemID: nil)
     }
     
     // MARK: - LAYOUTS CONFIG

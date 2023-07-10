@@ -119,7 +119,7 @@ final class EventCell: UITableViewCell {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: nil, comicID: nil)
+        delegate?.didTapSaveButton(row: nil, itemID: eventID)
     }
     
     // MARK: - SUBVIEWS

@@ -7,9 +7,11 @@
 
 import UIKit
 
+
 protocol SaveButtonConnectDelegate {
     func connect(id: Int)
 }
+
 
 final class SavedComicsVC: UIViewController {
     private var comics: [Comic] = []
@@ -102,11 +104,13 @@ final class SavedComicsVC: UIViewController {
 
 // MARK: - SAVE BUTTON EXT
 extension SavedComicsVC: SaveButtonDelegate {
-    func didTapSaveButton(row: Int?, comicID: Int?) {
-        if let comicID = comicID {
-            delegate?.connect(id: comicID)
-        }
+    
+    func didTapSaveButton(row: Int?, itemID: Int?) {
         getStoredData()
+        
+        if let itemID = itemID {
+            delegate?.connect(id: itemID)
+        }
         
         if let row = row {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }

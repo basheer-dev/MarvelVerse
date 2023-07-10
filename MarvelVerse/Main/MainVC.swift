@@ -178,13 +178,18 @@ extension MainVC: DropDownMenuDelegate {
         switch name {
         case Page.series.rawValue:
             let dest = SavedSeriesVC()
-//            dest.MainSeriesVC = seriesVC
+            dest.delegate = seriesVC as? any SaveButtonConnectDelegate
             
             navigationController?.pushViewController(dest, animated: true)
             
         case Page.Events.rawValue:
             let dest = SavedEventsVC()
-//            dest.MainEventsVC = eventsVC
+            dest.delegate = eventsVC as? any SaveButtonConnectDelegate
+            
+            navigationController?.pushViewController(dest, animated: true)
+            
+        case Page.characters.rawValue:
+            let dest = SavedCharactersVC()
             
             navigationController?.pushViewController(dest, animated: true)
             

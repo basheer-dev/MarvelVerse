@@ -7,8 +7,8 @@
 
 import UIKit
 
+
 final class CharactersVC: UIViewController {
-    
     private var characters: [Character] = []
     private var savedCharacters: [SavedCharacter] = []
     private var thumbnails: [Int: Data] = [:]
@@ -105,7 +105,7 @@ final class CharactersVC: UIViewController {
 
 // MARK: - SAVE BUTTON EXT
 extension CharactersVC: SaveButtonDelegate {
-    func didTapSaveButton(row: Int?, comicID: Int?) {
+    func didTapSaveButton(row: Int?, itemID: Int?) {
         getStoredData()
     }
 }

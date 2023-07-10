@@ -241,7 +241,7 @@ final class CharacterDetailsVC: UIViewController {
             saveButton.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: nil, comicID: nil)
+        delegate?.didTapSaveButton(row: nil, itemID: nil)
     }
     
     // MARK: - LAYOUTS CONFIG

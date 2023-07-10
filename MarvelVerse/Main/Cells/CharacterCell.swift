@@ -7,8 +7,8 @@
 
 import UIKit
 
-final class CharacterCell: UICollectionViewCell {
-    
+
+final class CharacterCell: UICollectionViewCell {    
     static let id = "CharacterContainer"
     
     let characterImageView: UIImageView = {

@@ -256,8 +256,8 @@ final class EventDetailsVC: UIViewController {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: rowID, comicID: nil)
-        savedEventDetailsDelegate?.didTapSaveButton(row: rowID, comicID: nil)
+        delegate?.didTapSaveButton(row: rowID, itemID: nil)
+        savedEventDetailsDelegate?.didTapSaveButton(row: rowID, itemID: nil)
     }
     
     @objc private func didTapNext() {

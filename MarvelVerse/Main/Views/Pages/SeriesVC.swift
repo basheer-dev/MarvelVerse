@@ -8,7 +8,6 @@
 import UIKit
 
 final class SeriesVC: UIViewController {
-    
     private var allSeries: [Series] = []
     private var savedSeries: [SavedSeries] = []
     private var thumbnails: [Int: Data] = [:]
@@ -108,15 +107,38 @@ final class SeriesVC: UIViewController {
 }
 
 // MARK: - SAVE BUTTON EXT
-extension SeriesVC: SaveButtonDelegate {
+extension SeriesVC: SaveButtonDelegate, SaveButtonConnectDelegate {
     
-    func didTapSaveButton(row: Int?, comicID: Int?) {
+    func didTapSaveButton(row: Int?, itemID: Int?) {
         getStoredData()
         
         if let row = row {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? SeriesCell else { return }
             cell.didTapSave()
         }
+    }
+    
+    func connect(id: Int) {
+        refresh(row: nil, seriesID: id)
+    }
+    
+    private func refresh(row: Int?, seriesID: Int?) {
+        getStoredData()
+        
+        if let row = row {
+            refreshCell(at: row)
+        }
+        
+        if let seriesID = seriesID {
+            if let row = allSeries.firstIndex(where: { $0.id == seriesID }) {
+                refreshCell(at: row)
+            }
+        }
+    }
+    
+    private func refreshCell(at row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? SeriesCell else { return }
+        cell.didTapSave()
     }
 }
 

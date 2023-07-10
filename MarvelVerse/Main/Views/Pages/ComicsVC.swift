@@ -111,7 +111,7 @@ final class ComicsVC: UIViewController {
 // MARK: - SAVE BUTTON EXT
 extension ComicsVC: SaveButtonDelegate, SaveButtonConnectDelegate {
     
-    func didTapSaveButton(row: Int?, comicID: Int?) {
+    func didTapSaveButton(row: Int?, itemID: Int?) {
         refresh(row: row, comicID: nil)
     }
     
@@ -123,16 +123,19 @@ extension ComicsVC: SaveButtonDelegate, SaveButtonConnectDelegate {
         getStoredData()
         
         if let row = row {
-            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
-            cell.didTapSave()
+            refreshCell(at: row)
         }
         
         if let comicID = comicID {
             if let row = comics.firstIndex(where: { $0.id == comicID }) {
-                guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
-                cell.didTapSave()
+                refreshCell(at: row)
             }
         }
+    }
+    
+    private func refreshCell(at row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ComicCell else { return }
+        cell.didTapSave()
     }
 }
 

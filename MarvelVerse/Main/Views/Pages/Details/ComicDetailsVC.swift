@@ -280,8 +280,8 @@ final class ComicDetailsVC: UIViewController {
             saveButton.configuration?.image = UIImage(systemName: "bookmark")
         }
         
-        delegate?.didTapSaveButton(row: rowID, comicID: nil)
-        savedComicDetailsDelegate?.didTapSaveButton(row: rowID, comicID: nil)
+        delegate?.didTapSaveButton(row: rowID, itemID: nil)
+        savedComicDetailsDelegate?.didTapSaveButton(row: rowID, itemID: nil)
     }
     
     // MARK: - LAYOUT CONFIG

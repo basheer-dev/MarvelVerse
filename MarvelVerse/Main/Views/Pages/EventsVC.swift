@@ -7,8 +7,8 @@
 
 import UIKit
 
+
 final class EventsVC: UIViewController {
-    
     private var events: [Event] = []
     private var savedEvents: [SavedEvent] = []
     private var thumbnails: [Int: Data] = [:]
@@ -109,15 +109,33 @@ final class EventsVC: UIViewController {
 
 
 // MARK: - SAVE BUTTON EXT
-extension EventsVC: SaveButtonDelegate {
+extension EventsVC: SaveButtonDelegate, SaveButtonConnectDelegate {
     
-    func didTapSaveButton(row: Int?, comicID: Int?) {
+    func didTapSaveButton(row: Int?, itemID: Int?) {
+        refresh(row: row, eventID: nil)
+    }
+    
+    func connect(id: Int) {
+        refresh(row: nil, eventID: id)
+    }
+    
+    private func refresh(row: Int?, eventID: Int?)  {
         getStoredData()
         
         if let row = row {
-            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? EventCell else { return }
-            cell.didTapSave()
+            refreshCell(at: row)
         }
+        
+        if let eventID = eventID {
+            if let row = events.firstIndex(where: { $0.id == eventID }) {
+                refreshCell(at: row)
+            }
+        }
+    }
+    
+    private func refreshCell(at row: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? EventCell else { return }
+        cell.didTapSave()
     }
 }
 

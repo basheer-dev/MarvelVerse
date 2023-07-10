@@ -147,8 +147,8 @@ final class EventCell: UITableViewCell {
             
             saveButton.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 10),
             saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            saveButton.widthAnchor.constraint(equalToConstant: 20),
-            saveButton.heightAnchor.constraint(equalToConstant: 20),
+            saveButton.widthAnchor.constraint(equalToConstant: 30),
+            saveButton.heightAnchor.constraint(equalToConstant: 30),
             
             titleLabel.centerYAnchor.constraint(equalTo: saveButton.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),

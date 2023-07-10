@@ -303,8 +303,8 @@ final class ComicDetailsVC: UIViewController {
             
             saveButton.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            saveButton.widthAnchor.constraint(equalToConstant: 20),
-            saveButton.heightAnchor.constraint(equalToConstant: 20),
+            saveButton.widthAnchor.constraint(equalToConstant: 30),
+            saveButton.heightAnchor.constraint(equalToConstant: 30),
             
             collectionView.topAnchor.constraint(equalTo: formatLabel.bottomAnchor, constant: 50),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

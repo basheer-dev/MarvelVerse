@@ -16,20 +16,20 @@ final class MainVC: UIViewController {
     
     private var pageContentView: UIView?
     private let comicsVC = ComicsVC()
+    private var isDropDownMenuActive: Bool = false
     private var isSideMenuActive: Bool = false
     
-    enum Pages: String, CaseIterable {
+    enum Page: String, CaseIterable {
         case comics = "Comics"
         case series = "Series"
         case Events = "Events"
         case characters = "Characters"
     }
     
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController()
-        searchController.searchBar.delegate = self
+    private let dropDownMenu: UIViewController = {
+        let x = UIViewController()
         
-        return searchController
+        return x
     }()
     
     private let sideMenu: UIView = {
@@ -52,6 +52,13 @@ final class MainVC: UIViewController {
         return tableView
     }()
     
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController()
+        searchController.searchBar.delegate = self
+        
+        return searchController
+    }()
+    
     // MARK: - VDL
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +69,7 @@ final class MainVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .systemRed
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(test))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: self, action: #selector(toggleDropDownMenu))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(toggleSideMenu))
         
         handleSwipes()
@@ -135,7 +142,40 @@ final class MainVC: UIViewController {
         }
     }
     
-    @objc func test() {}
+    @objc func toggleDropDownMenu(_ sender: UIBarButtonItem) {
+        let dest = DropDownMenuVC()
+        dest.modalPresentationStyle = .popover
+        Page.allCases.forEach {
+            page in
+            dest.items.append(page.rawValue)
+        }
+        
+        dest.popoverPresentationController?.permittedArrowDirections = .up
+        dest.popoverPresentationController?.sourceView = self.view
+        dest.popoverPresentationController?.sourceRect = CGRect(x: view.frame.width - 25, y: 100, width: 10, height: 10)
+        dest.popoverPresentationController?.delegate = self
+        
+        present(dest, animated: true, completion: nil)
+    }
+    
+    @objc private func dropDownMenuButtonTapped() {
+        print("tapped")
+    }
+}
+
+
+extension MainVC: UIPopoverPresentationControllerDelegate{
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+}
+
+
+// MARK: - DROP DOWN MENU EXT
+extension MainVC: DropDownMenuDelegate {
+    func didTapMenuItem(named name: String) {
+        //
+    }
 }
 
 
@@ -159,21 +199,21 @@ extension MainVC: UISearchBarDelegate {
 extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Pages.allCases.count
+        return Page.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         var cellInfo = cell.defaultContentConfiguration()
         
-        cellInfo.text = Pages.allCases[indexPath.row].rawValue
+        cellInfo.text = Page.allCases[indexPath.row].rawValue
         cellInfo.textProperties.color = .label
         cellInfo.textProperties.font = .systemFont(ofSize: 15, weight: .bold)
         
         cell.contentConfiguration = cellInfo
         cell.backgroundColor = .secondarySystemBackground
         
-        if title == Pages.comics.rawValue && cellInfo.text == Pages.comics.rawValue {
+        if title == Page.comics.rawValue && cellInfo.text == Page.comics.rawValue {
             cell.backgroundColor = .systemRed
         }
         
@@ -182,7 +222,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let dest = Pages.allCases[indexPath.row].rawValue
+        let dest = Page.allCases[indexPath.row].rawValue
         
         switchView(to: dest)
     }
@@ -200,13 +240,13 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         let row: Int
         
         switch title {
-        case Pages.series.rawValue:
+        case Page.series.rawValue:
             row = 1
             dest = SeriesVC()
-        case Pages.characters.rawValue:
+        case Page.characters.rawValue:
             row = 3
             dest = CharactersVC()
-        case Pages.Events.rawValue:
+        case Page.Events.rawValue:
             row = 2
             dest = EventsVC()
         default:

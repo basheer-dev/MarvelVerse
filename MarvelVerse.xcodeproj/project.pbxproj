@@ -12,6 +12,7 @@
 		3A0D7CA42A51B5FF0061E3A5 /* SeriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7CA32A51B5FF0061E3A5 /* SeriesVC.swift */; };
 		3A0D7CA62A51B6270061E3A5 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7CA52A51B6270061E3A5 /* EventsVC.swift */; };
 		3A0D7CA92A51D4260061E3A5 /* ComicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D7CA82A51D4260061E3A5 /* ComicCell.swift */; };
+		3A163D732A5BD422004DED11 /* DropDownMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */; };
 		3A3A1EBA2A570C1000B1441F /* ComicsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EB92A570C1000B1441F /* ComicsVC.swift */; };
 		3A3A1EBC2A572CC000B1441F /* ModelTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EBB2A572CC000B1441F /* ModelTextManager.swift */; };
 		3A3A1EBE2A572D5800B1441F /* ModelDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3A1EBD2A572D5800B1441F /* ModelDateManager.swift */; };
@@ -53,6 +54,7 @@
 		3A0D7CA32A51B5FF0061E3A5 /* SeriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesVC.swift; sourceTree = "<group>"; };
 		3A0D7CA52A51B6270061E3A5 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
 		3A0D7CA82A51D4260061E3A5 /* ComicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicCell.swift; sourceTree = "<group>"; };
+		3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownMenuVC.swift; sourceTree = "<group>"; };
 		3A3A1EB92A570C1000B1441F /* ComicsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicsVC.swift; sourceTree = "<group>"; };
 		3A3A1EBB2A572CC000B1441F /* ModelTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTextManager.swift; sourceTree = "<group>"; };
 		3A3A1EBD2A572D5800B1441F /* ModelDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDateManager.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				3A08C7372A501DA50085131B /* Views */,
 				3A0D7CA72A51D40F0061E3A5 /* Cells */,
 				3AC40C892A52C415001A97EB /* Objects */,
+				3A163D722A5BD422004DED11 /* DropDownMenuVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				3ACED5812A59177F00EF12BE /* Events.swift in Sources */,
 				3AE0BA3D2A5AECDD0074E79C /* MarvelVerse.xcdatamodeld in Sources */,
 				3A3A1EBE2A572D5800B1441F /* ModelDateManager.swift in Sources */,
+				3A163D732A5BD422004DED11 /* DropDownMenuVC.swift in Sources */,
 				3A6FA40F2A4F1C2C001C104E /* AppDelegate.swift in Sources */,
 				3A416F842A55881100C09C00 /* SeriesDetailsVC.swift in Sources */,
 				3A3A1EBA2A570C1000B1441F /* ComicsVC.swift in Sources */,

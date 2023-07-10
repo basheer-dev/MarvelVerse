@@ -156,7 +156,7 @@ final class MainVC: UIViewController {
         
         dest.popoverPresentationController?.permittedArrowDirections = []
         dest.popoverPresentationController?.sourceView = self.view
-        dest.popoverPresentationController?.sourceRect = CGRect(x: view.frame.width - 25, y: 100, width: 10, height: 10)
+        dest.popoverPresentationController?.sourceRect = CGRect(x: view.frame.width - 25, y: 175, width: 10, height: 10)
         dest.popoverPresentationController?.delegate = self
         
         present(dest, animated: true, completion: nil)

@@ -94,7 +94,6 @@ final class MainVC: UIViewController {
     }
     
     private func configureSubviews() {
-//        let comicsVC = ComicsVC()
         delegate = self.comicsVC as? any APIDataSearch
         
         addChild(comicsVC)
@@ -155,7 +154,7 @@ final class MainVC: UIViewController {
             dest.items.append(page.rawValue)
         }
         
-        dest.popoverPresentationController?.permittedArrowDirections = .up
+        dest.popoverPresentationController?.permittedArrowDirections = []
         dest.popoverPresentationController?.sourceView = self.view
         dest.popoverPresentationController?.sourceRect = CGRect(x: view.frame.width - 25, y: 100, width: 10, height: 10)
         dest.popoverPresentationController?.delegate = self

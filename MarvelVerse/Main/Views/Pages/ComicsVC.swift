@@ -68,9 +68,14 @@ final class ComicsVC: UIViewController {
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            
+            if title.lowercased() == "spider man" {
+                urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "-"))"
+            } else {
+                urlString += "&titleStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            }
         }
-        
+                
         DispatchQueue.global(qos: .userInteractive).async {
             [weak self] in
             

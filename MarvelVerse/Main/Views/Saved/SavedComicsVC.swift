@@ -73,6 +73,7 @@ final class SavedComicsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        title = "Saved Comics"
         
         getStoredData()
         fetchData()
@@ -95,6 +96,7 @@ final class SavedComicsVC: UIViewController {
         case .done:
             return doneImageView
         case .empty:
+            tableView.contentInset.top = 150
             return emptyImageView
         default:
             return activityIndicator

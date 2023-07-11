@@ -17,10 +17,12 @@ final class DropDownMenuVC: UIViewController {
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DropDownMenuItemContainer")
+        tableView.contentInset = .zero
         tableView.separatorInset = .zero
         tableView.isScrollEnabled = false
         
@@ -46,8 +48,14 @@ final class DropDownMenuVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        tableView.frame = view.bounds
         view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 

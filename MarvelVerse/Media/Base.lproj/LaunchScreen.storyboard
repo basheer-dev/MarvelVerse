@@ -17,8 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MARVEL VERSE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qM6-pJ-w0X">
-                                <rect key="frame" x="98.333333333333329" y="363.33333333333331" width="196.66666666666669" height="25.333333333333314"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MarvelVerse-LogoTransparent" translatesAutoresizingMaskIntoConstraints="NO" id="0tB-0s-uLT">
+                                <rect key="frame" x="76.666666666666686" y="159" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="CYG-9f-PVc"/>
+                                    <constraint firstAttribute="width" constant="240" id="gIX-nS-A1w"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MARVEL VERSE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wV7-80-Apr">
+                                <rect key="frame" x="98.333333333333329" y="474" width="196.66666666666669" height="25.333333333333314"/>
                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                 <color key="textColor" systemColor="systemRedColor"/>
                                 <nil key="highlightedColor"/>
@@ -27,8 +34,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="qM6-pJ-w0X" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-50" id="iGA-KH-HKH"/>
-                            <constraint firstItem="qM6-pJ-w0X" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="l1R-Rw-wFe"/>
+                            <constraint firstItem="0tB-0s-uLT" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="6jN-on-vPR"/>
+                            <constraint firstItem="0tB-0s-uLT" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="9bZ-XF-YuN"/>
+                            <constraint firstItem="wV7-80-Apr" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="HCB-PH-lHy"/>
+                            <constraint firstItem="wV7-80-Apr" firstAttribute="top" secondItem="0tB-0s-uLT" secondAttribute="bottom" constant="75" id="dIP-TT-Zde"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -38,6 +47,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="MarvelVerse-LogoTransparent" width="1024" height="1024"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -34,6 +34,17 @@ final class CharactersVC: UIViewController {
         
         return collectionView
     }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = .systemRed
+        
+        return activityIndicator
+    }()
 
     // MARK: - VDL
     override func viewDidLoad() {
@@ -48,6 +59,12 @@ final class CharactersVC: UIViewController {
         collectionView.frame = view.bounds
         
         view.addSubview(collectionView)
+        view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     // MARK: - COREDATA
@@ -65,7 +82,12 @@ final class CharactersVC: UIViewController {
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            
+            if title.lowercased() == "spider man" {
+                urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "-"))"
+            } else {
+                urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            }
         }
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -88,6 +110,8 @@ final class CharactersVC: UIViewController {
             DispatchQueue.main.async {
                 [weak self] in
                 guard let self = self else { return }
+                
+                self.activityIndicator.stopAnimating()
                 
                 for character in APICharacters {
                     if self.characters.contains(where: { $0.id == character.id }) == false && character.thumbnail?.path?.contains("/image_not_available") == false {

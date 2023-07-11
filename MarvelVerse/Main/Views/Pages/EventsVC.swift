@@ -68,7 +68,12 @@ final class EventsVC: UIViewController {
         }
         
         if !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            
+            if title.lowercased() == "spider man" {
+                urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "-§"))"
+            } else {
+                urlString += "&nameStartsWith=\(title.replacingOccurrences(of: " ", with: "%20"))"
+            }
         }
         
         DispatchQueue.global(qos: .userInteractive).async {

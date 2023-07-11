@@ -19,6 +19,7 @@ class CoreDataManager {
         case Character
     }
     
+    
     func getSavedComics() -> [SavedComic] {
         var comics: [SavedComic] = []
         
@@ -30,6 +31,7 @@ class CoreDataManager {
         
         return comics
     }
+    
     
     func getSavedSeries() -> [SavedSeries] {
         var series: [SavedSeries] = []
@@ -43,6 +45,7 @@ class CoreDataManager {
         return series
     }
     
+    
     func getSavedEvents() -> [SavedEvent] {
         var events: [SavedEvent] = []
         
@@ -54,6 +57,7 @@ class CoreDataManager {
         
         return events
     }
+    
     
     func getSavedCharacters() -> [SavedCharacter] {
         var characters: [SavedCharacter] = []
@@ -98,6 +102,7 @@ class CoreDataManager {
         saveContext()
     }
     
+    
     func deleteObject(type: Entity, id: Int) {
         switch type {
         case .Series:
@@ -119,6 +124,7 @@ class CoreDataManager {
         
         saveContext()
     }
+    
     
     func saveContext() {
         do {

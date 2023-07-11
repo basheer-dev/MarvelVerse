@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class EventDetailsVC: UIViewController {
     private var eventID = Int()
     private var isSaved: Bool = false
@@ -196,6 +195,8 @@ final class EventDetailsVC: UIViewController {
         endYearLabel.text = ModelDateManager.shared.getDate(from: event.end, getYearOnly: true)
         descriptionLabel.text = ModelTextManager.shared.getDescription(from: event.description)
         
+        saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        
         if isSaved == true {
             self.isSaved = true
             saveButton.configuration?.image = UIImage(systemName: "bookmark.fill")
@@ -262,34 +263,17 @@ final class EventDetailsVC: UIViewController {
     }
     
     @objc private func didTapNext() {
-        activityIndicator.startAnimating()
-        
-        titleLabel.text = nextEventTitle
-        eventImageView.image = .none
-        nextButton.isHidden = true
-        previousButton.isHidden = true
-        startYearLabel.text = "Loading ..."
-        modificationDateLabel.text = "Loading ..."
-        endYearLabel.text = "Loading ..."
-        descriptionLabel.text = "Loading ..."
-        
-        let urlString = nextEvent + URLManager.shared.getAPIUserKeyInfo()
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            [weak self] in
-            
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    self?.parseJSON(json: data)
-                }
-            }
-        }
+        clearView(toNext: true)
     }
     
     @objc private func didTapPrevious() {
+        clearView()
+    }
+    
+    private func clearView(toNext: Bool = false) {
+        var urlString = String()
         activityIndicator.startAnimating()
         
-        titleLabel.text = previousEventTitle
         eventImageView.image = .none
         nextButton.isHidden = true
         previousButton.isHidden = true
@@ -298,7 +282,16 @@ final class EventDetailsVC: UIViewController {
         endYearLabel.text = "Loading ..."
         descriptionLabel.text = "Loading ..."
         
-        let urlString = previousEvent + URLManager.shared.getAPIUserKeyInfo()
+        self.isSaved = false
+        saveButton.configuration?.image = UIImage(systemName: "bookmark")
+        
+        if toNext {
+            titleLabel.text = nextEventTitle
+            urlString = nextEvent + URLManager.shared.getAPIUserKeyInfo()
+        } else {
+            titleLabel.text = previousEventTitle
+            urlString = previousEvent + URLManager.shared.getAPIUserKeyInfo()
+        }
         
         DispatchQueue.global(qos: .userInteractive).async {
             [weak self] in
@@ -318,7 +311,7 @@ final class EventDetailsVC: UIViewController {
             if let APIEvent = APIData.data.results.first {
                 DispatchQueue.main.async {
                     [weak self] in
-                    self?.set(event: APIEvent, rowID: 0)
+                    self?.set(event: APIEvent, rowID: 0, isSaved: CoreDataManager.shared.getSavedEvents().contains(where: { $0.id == APIEvent.id }))
                 }
             }
         }

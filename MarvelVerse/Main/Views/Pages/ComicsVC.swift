@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class ComicsVC: UIViewController {
     private var comics: [Comic] = []
     private var savedComics: [SavedComic] = []

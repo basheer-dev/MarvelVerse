@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class CharacterDetailsVC: UIViewController {
     private var characterID = Int()
     private var isSaved: Bool = false

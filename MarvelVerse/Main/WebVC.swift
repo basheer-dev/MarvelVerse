@@ -8,7 +8,6 @@
 import UIKit
 import WebKit
 
-
 final class WebVC: UIViewController {
     
     private lazy var webView: WKWebView = {
@@ -33,6 +32,10 @@ final class WebVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        webView.removeObserver(self, forKeyPath: "estimatedProgress")
     }
     
     func set(urlString: String) {

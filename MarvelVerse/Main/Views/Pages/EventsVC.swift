@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class EventsVC: UIViewController {
     private var events: [Event] = []
     private var savedEvents: [SavedEvent] = []

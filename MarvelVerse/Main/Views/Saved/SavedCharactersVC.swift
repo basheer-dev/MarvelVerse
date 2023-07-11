@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class SavedCharactersVC: UIViewController {
     private var characters: [Character] = []
     private var savedCharacters: [SavedCharacter] = []

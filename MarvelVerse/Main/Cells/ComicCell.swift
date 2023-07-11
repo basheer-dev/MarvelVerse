@@ -7,11 +7,9 @@
 
 import UIKit
 
-
 protocol SaveButtonDelegate {
     func didTapSaveButton(row: Int?, itemID: Int?)
 }
-
 
 final class ComicCell: UITableViewCell {
     static let id: String = "ComicContainer"

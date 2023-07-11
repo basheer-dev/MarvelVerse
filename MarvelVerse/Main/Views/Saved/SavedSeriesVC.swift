@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SavedSeriesVC: UIViewController {
+final class SavedSeriesVC: UIViewController {
     private var allSeries: [Series] = []
     private var savedSeries: [SavedSeries] = []
     private var thumbnails: [Int: Data] = [:]

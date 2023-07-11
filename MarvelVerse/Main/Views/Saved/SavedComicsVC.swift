@@ -7,11 +7,9 @@
 
 import UIKit
 
-
 protocol SaveButtonConnectDelegate {
     func connect(id: Int)
 }
-
 
 final class SavedComicsVC: UIViewController {
     private var comics: [Comic] = []

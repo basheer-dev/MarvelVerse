@@ -11,7 +11,7 @@ protocol DropDownMenuDelegate {
     func didTapMenuItem(named name: String)
 }
 
-class DropDownMenuVC: UIViewController {
+final class DropDownMenuVC: UIViewController {
     var items: [String] = []
     var delegate: DropDownMenuDelegate?
     

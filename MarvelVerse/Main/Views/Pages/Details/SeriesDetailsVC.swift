@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class SeriesDetailsVC: UIViewController {
     private var seriesID = Int()
     private var isSaved: Bool = false

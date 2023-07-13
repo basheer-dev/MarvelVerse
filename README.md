@@ -1,7 +1,7 @@
 # MARVEL VERSE
 
 >[!check]
->- There's a video trailer explaining all aspects of this project in twitter, you can watch it [from here]().
+>- There's a video trailer explaining all aspects of this project in twitter, you can watch it [from here](https://twitter.com/basheer_dev/status/1679347451470176257?s=46).
 
 - **Marvel verse** is an iOS mobile application through which you can explore the **Marvel Universe**, search for comic, read the available series, navigation through every Marvel event and learn more about your favorite characters.
 - It fetches the data directly from the [Marvel API](https://developer.marvel.com).

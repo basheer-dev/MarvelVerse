@@ -1,5 +1,7 @@
 # MARVEL VERSE
 
+![Screenshot 2024-05-16 at 05 51 58](https://github.com/basheer-dev/MarvelVerse/assets/135429870/2973ee22-aaaf-4ac1-8fb3-61442bf4244c)
+
 
 >- There's a video trailer explaining all aspects of this project in twitter, you can watch it [from here](https://twitter.com/basheer_dev/status/1679347451470176257?s=46).
 
